@@ -17,11 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages;
-
-import nu.nethome.zwave.messages.DecoderException;
-import nu.nethome.zwave.messages.Message;
-import nu.nethome.zwave.messages.MessageAdaptor;
+package nu.nethome.zwave.messages.framework;
 
 import java.io.IOException;
 import java.util.HashMap;

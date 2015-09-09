@@ -17,14 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands;
+package nu.nethome.zwave.messages.framework;
 
-/**
- *
- */
-public interface Command {
-    int getCommandClass();
-    int getCommand();
+import java.io.IOException;
 
-    byte[] encode();
+interface MessageProcessor {
+    Message process(byte[] message) throws DecoderException, IOException;
 }

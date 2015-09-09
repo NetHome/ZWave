@@ -17,23 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages;
+package nu.nethome.zwave.messages.commands.framework;
 
-import nu.nethome.zwave.Hex;
-import nu.nethome.zwave.messages.framework.DecoderException;
-import org.junit.Test;
+public class CommandCode {
+    public final int commandClass;
+    public final int command;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+    public CommandCode(int commandClass, int command) {
+        this.commandClass = commandClass;
+        this.command = command;
+    }
 
-/**
- *
- */
-public class AddNodeEventTest {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    @Test
-    public void canDecodeStartedEvent() throws Exception, DecoderException {
-        AddNode.Event addNodeEvent = new AddNode.Event(Hex.hexStringToByteArray("004AFF010000"));
-        assertThat(addNodeEvent.status, is(AddNode.Event.Status.LEARN_READY));
+        CommandCode that = (CommandCode) o;
+
+        if (command != that.command) return false;
+        if (commandClass != that.commandClass) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = commandClass;
+        result = 31 * result + command;
+        return result;
     }
 }

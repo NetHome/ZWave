@@ -20,9 +20,8 @@
 package nu.nethome.zwave.messages;
 
 import nu.nethome.zwave.Hex;
+import nu.nethome.zwave.messages.framework.DecoderException;
 import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

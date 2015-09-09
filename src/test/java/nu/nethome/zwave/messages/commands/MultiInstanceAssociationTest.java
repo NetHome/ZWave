@@ -21,7 +21,7 @@ package nu.nethome.zwave.messages.commands;
 
 
 import nu.nethome.zwave.Hex;
-import nu.nethome.zwave.messages.DecoderException;
+import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.SendData;
 import org.junit.Test;
 

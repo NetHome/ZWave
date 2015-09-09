@@ -43,6 +43,9 @@ public class SendDataRequestTest {
         request = new SendData.Request((byte) 2, new MultiInstanceAssociation.Get(2), TRANSMIT_OPTIONS);
         result = Hex.asHexString(request.encode());
         System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
+        GetInitData.Request request1 = new GetInitData.Request();
+        result = Hex.asHexString(request1.encode());
+        System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
         //
         // 00 04 0006 06: 85 03 01 0A 00 01
         // 00 04 0006 06: 85 03 02 0A 00 02

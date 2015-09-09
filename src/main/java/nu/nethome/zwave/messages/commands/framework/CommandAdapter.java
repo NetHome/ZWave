@@ -17,11 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands;
+package nu.nethome.zwave.messages.commands.framework;
 
 
-import nu.nethome.zwave.messages.DecoderException;
-import nu.nethome.zwave.messages.commands.Command;
+import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

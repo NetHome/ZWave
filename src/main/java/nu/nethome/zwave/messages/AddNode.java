@@ -19,7 +19,10 @@
 
 package nu.nethome.zwave.messages;
 
-import java.io.ByteArrayInputStream;
+import nu.nethome.zwave.messages.framework.DecoderException;
+import nu.nethome.zwave.messages.framework.MessageAdaptor;
+import nu.nethome.zwave.messages.framework.MessageProcessorAdaptor;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 

@@ -21,9 +21,14 @@ package nu.nethome.zwave;
 
 import nu.nethome.zwave.messages.*;
 import nu.nethome.zwave.messages.commands.*;
+import nu.nethome.zwave.messages.commands.framework.Command;
+import nu.nethome.zwave.messages.commands.framework.CommandCode;
+import nu.nethome.zwave.messages.commands.framework.MultiCommandProcessor;
+import nu.nethome.zwave.messages.framework.DecoderException;
+import nu.nethome.zwave.messages.framework.Message;
+import nu.nethome.zwave.messages.framework.MultiMessageProcessor;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;

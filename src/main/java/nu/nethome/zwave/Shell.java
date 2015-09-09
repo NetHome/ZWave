@@ -34,8 +34,7 @@ public class Shell {
     ZWavePort port;
 
     public static void main(String[] args) throws PortException, IOException {
-        new Shell().run(args[1]);
-        System.out.println("Hello World!");
+        new Shell().run(args[0]);
     }
 
     private void run(String portname) throws PortException, IOException {
@@ -77,5 +76,6 @@ public class Shell {
             executor.executeCommandLine(line);
             line = br.readLine();
         }
+        port.close();
     }
 }

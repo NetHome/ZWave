@@ -19,10 +19,9 @@
 
 package nu.nethome.zwave.messages;
 
-import nu.nethome.zwave.messages.DecoderException;
-import nu.nethome.zwave.messages.MessageAdaptor;
-
-import java.io.ByteArrayInputStream;
+import nu.nethome.zwave.messages.framework.DecoderException;
+import nu.nethome.zwave.messages.framework.MessageAdaptor;
+import nu.nethome.zwave.messages.framework.MessageProcessorAdaptor;
 
 /*
  * event,ZWave_Message,Direction,Out,Value,0020

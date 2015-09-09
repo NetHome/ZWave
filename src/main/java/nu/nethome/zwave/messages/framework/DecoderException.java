@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages;
+package nu.nethome.zwave.messages.framework;
 
 /**
 *

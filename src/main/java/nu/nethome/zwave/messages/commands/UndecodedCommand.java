@@ -20,7 +20,9 @@
 package nu.nethome.zwave.messages.commands;
 
 import nu.nethome.zwave.Hex;
-import nu.nethome.zwave.messages.DecoderException;
+import nu.nethome.zwave.messages.commands.framework.CommandAdapter;
+import nu.nethome.zwave.messages.commands.framework.CommandProcessorAdapter;
+import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.util.Arrays;
 

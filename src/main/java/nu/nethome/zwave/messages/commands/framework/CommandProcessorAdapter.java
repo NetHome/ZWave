@@ -17,10 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages;
+package nu.nethome.zwave.messages.commands.framework;
 
-import java.io.IOException;
+import nu.nethome.zwave.messages.framework.DecoderException;
 
-interface MessageProcessor {
-    Message process(byte[] message) throws DecoderException, IOException;
+public abstract class CommandProcessorAdapter<T>  implements CommandProcessor {
+    protected T process(T command) throws DecoderException {return command;}
 }

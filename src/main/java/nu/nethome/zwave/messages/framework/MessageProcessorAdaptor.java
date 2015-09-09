@@ -17,11 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands;
+package nu.nethome.zwave.messages.framework;
 
-import nu.nethome.zwave.messages.DecoderException;
-import nu.nethome.zwave.messages.commands.CommandProcessor;
-
-abstract class CommandProcessorAdapter<T>  implements CommandProcessor {
+public abstract class MessageProcessorAdaptor<T> implements MessageProcessor {
     protected T process(T command) throws DecoderException {return command;}
 }
