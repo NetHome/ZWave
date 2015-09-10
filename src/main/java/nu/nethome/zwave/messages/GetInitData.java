@@ -82,7 +82,7 @@ public class GetInitData {
             for (int node : nodes) {
                 nodesString += " " + Integer.toString(node);
             }
-            return String.format("GetInitData.Response(Mode=%s, type = %s, nodes: %s)", mode.name(), type.name(), nodesString);
+            return String.format("GetInitData.Response(mode=%s, type=%s, nodes: %s)", mode.name(), type.name(), nodesString);
         }
 
         public static class Processor extends MessageProcessorAdaptor<Response> {

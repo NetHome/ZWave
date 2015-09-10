@@ -24,20 +24,21 @@ import jssc.SerialPortException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
-/**
- * Hello world!
- */
 public class Shell {
     ZWaveExecutor executor;
     ZWavePort port;
+    private NetHomePort netHomePort;
 
     public static void main(String[] args) throws PortException, IOException {
-        new Shell().run(args[0]);
+        if (args.length == 2) {
+            new Shell().runWithNetHomePort(args[0], Integer.parseInt(args[1]));
+        } else {
+            new Shell().runWithLocalPort(args[0]);
+        }
     }
 
-    private void run(String portname) throws PortException, IOException {
+    private void runWithLocalPort(String portname) throws PortException, IOException {
         port = new ZWavePort(portname, new ZWavePort.Receiver() {
             @Override
             public void receiveMessage(byte[] message) {
@@ -77,5 +78,40 @@ public class Shell {
             line = br.readLine();
         }
         port.close();
+    }
+
+    private void runWithNetHomePort(String address, int portNumber) throws PortException, IOException {
+        netHomePort = new NetHomePort(address, portNumber, new NetHomePort.Receiver() {
+            @Override
+            public void receiveMessage(byte[] message) {
+                executor.processZWaveMessage(message);
+            }
+        });
+
+        executor = new ZWaveExecutor(
+                new ZWaveExecutor.MessageSender() {
+                    @Override
+                    public void sendZWaveMessage(byte[] zWaveMessage) {
+                        try {
+                            netHomePort.sendMessage(zWaveMessage);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new ZWaveExecutor.Printer() {
+                    @Override
+                    public void print(String message) {
+                        System.out.println(message);
+                    }
+                }
+        );
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line = br.readLine();
+        while (!line.equalsIgnoreCase("quit")) {
+            executor.executeCommandLine(line);
+            line = br.readLine();
+        }
+        netHomePort.close();
     }
 }

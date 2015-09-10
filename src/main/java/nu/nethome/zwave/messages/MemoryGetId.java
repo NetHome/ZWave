@@ -50,7 +50,7 @@ public class MemoryGetId  {
 
         @Override
         public String toString() {
-            return String.format("MemoryGetId.Response(homeId=%X, nodeId = %d)", homeId, nodeId);
+            return String.format("MemoryGetId.Response(homeId=%X, nodeId=%d)", homeId, nodeId);
         }
 
         public static class Processor extends MessageProcessorAdaptor<Response> {

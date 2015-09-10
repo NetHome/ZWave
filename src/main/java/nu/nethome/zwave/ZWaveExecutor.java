@@ -67,6 +67,7 @@ public class ZWaveExecutor {
         messageProcessor.addMessageProcessor(MemoryGetId.MEMORY_GET_ID, new MemoryGetId.Response.Processor());
         messageProcessor.addMessageProcessor(SendData.REQUEST_ID, new SendData.Response.Processor());
         messageProcessor.addMessageProcessor(AddNode.REQUEST_ID, new AddNode.Event.Processor());
+        messageProcessor.addMessageProcessor(GetInitData.REQUEST_ID, new GetInitData.Response.Processor());
         messageProcessor.addMessageProcessor(ApplicationCommand.REQUEST_ID, new ApplicationCommand.Request.Processor(commandProcessor));
     }
 
@@ -76,6 +77,8 @@ public class ZWaveExecutor {
             String command = parameters.getString();
             if (command.equalsIgnoreCase("MemoryGetId")) {
                 sendRequest(new MemoryGetId.Request());
+            } else if (command.equalsIgnoreCase("GetInitData")) {
+                sendRequest(new GetInitData.Request());
             } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Get") || command.equalsIgnoreCase("MIA.Get")) {
                 sendCommand(parameters.getInt(1), new MultiInstanceAssociation.Get(parameters.getInt(2)));
             } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Set") || command.equalsIgnoreCase("MIA.Set")) {
@@ -94,6 +97,7 @@ public class ZWaveExecutor {
                 sendRequest(new AddNode.Request(AddNode.Request.InclusionMode.fromName(parameters.getString(1))));
             } else if (command.equalsIgnoreCase("Help") || command.equalsIgnoreCase("h")) {
                 print("MemoryGetId");
+                print("GetInitData");
                 print("AddNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
                 print("MultiInstanceAssociation.Get node association");
                 print("MultiInstanceAssociation.Set node association associatedNode");
