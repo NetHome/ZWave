@@ -17,27 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands;
+package nu.nethome.zwave.messages.commandclasses;
 
-import nu.nethome.zwave.messages.commands.framework.CommandAdapter;
-import nu.nethome.zwave.messages.commands.framework.CommandClass;
-import nu.nethome.zwave.messages.commands.framework.CommandProcessorAdapter;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandAdapter;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandClass;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandProcessorAdapter;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.io.ByteArrayOutputStream;
 
 /**
- * 004AFF060000
- * 004AFF010000
- * 00 04 0002 06: 31 05 0422000B
- * 00 04 0006 07: 60 0D 0007200100
- * 00 04   06 03: 85 02 09
  *
- * 00 04 0006 02: 84 07
- * 00 04 0006 03: 80 0364
- * 00 04 0006 03: 80 0364
  */
-public class Association implements CommandClass {
+public class AssociationCommandClass implements CommandClass {
 
     private static final int SET_ASSOCIATION = 0x01;
     private static final int GET_ASSOCIATION = 0x02;

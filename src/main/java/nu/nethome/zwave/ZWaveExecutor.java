@@ -20,10 +20,10 @@
 package nu.nethome.zwave;
 
 import nu.nethome.zwave.messages.*;
-import nu.nethome.zwave.messages.commands.*;
-import nu.nethome.zwave.messages.commands.framework.Command;
-import nu.nethome.zwave.messages.commands.framework.CommandCode;
-import nu.nethome.zwave.messages.commands.framework.MultiCommandProcessor;
+import nu.nethome.zwave.messages.commandclasses.*;
+import nu.nethome.zwave.messages.commandclasses.framework.Command;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandCode;
+import nu.nethome.zwave.messages.commandclasses.framework.MultiCommandProcessor;
 import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.Message;
 import nu.nethome.zwave.messages.framework.MultiMessageProcessor;
@@ -60,9 +60,9 @@ public class ZWaveExecutor {
         this.sender = sender;
         this.printer = printer;
         commandProcessor = new MultiCommandProcessor();
-        commandProcessor.addCommandProcessor(new CommandCode(MultiInstanceAssociation.COMMAND_CLASS, MultiInstanceAssociation.ASSOCIATION_REPORT), new MultiInstanceAssociation.Report.Processor());
-        commandProcessor.addCommandProcessor(new CommandCode(Configuration.COMMAND_CLASS, Configuration.REPORT_CONFIGURATION), new Configuration.Report.Processor());
-        commandProcessor.addCommandProcessor(new CommandCode(SwitchBinary.COMMAND_CLASS, SwitchBinary.SWITCH_BINARY_REPORT), new SwitchBinary.Report.Processor());
+        commandProcessor.addCommandProcessor(new CommandCode(MultiInstanceAssociationCommandClass.COMMAND_CLASS, MultiInstanceAssociationCommandClass.ASSOCIATION_REPORT), new MultiInstanceAssociationCommandClass.Report.Processor());
+        commandProcessor.addCommandProcessor(new CommandCode(ConfigurationCommandClass.COMMAND_CLASS, ConfigurationCommandClass.REPORT_CONFIGURATION), new ConfigurationCommandClass.Report.Processor());
+        commandProcessor.addCommandProcessor(new CommandCode(SwitchBinaryCommandClass.COMMAND_CLASS, SwitchBinaryCommandClass.SWITCH_BINARY_REPORT), new SwitchBinaryCommandClass.Report.Processor());
         messageProcessor = new MultiMessageProcessor();
         messageProcessor.addMessageProcessor(MemoryGetId.MEMORY_GET_ID, new MemoryGetId.Response.Processor());
         messageProcessor.addMessageProcessor(SendData.REQUEST_ID, new SendData.Response.Processor());
@@ -75,24 +75,24 @@ public class ZWaveExecutor {
         try {
             CommandLineParser parameters = new CommandLineParser(commandLine);
             String command = parameters.getString();
-            if (command.equalsIgnoreCase("MemoryGetId")) {
+            if (command.equalsIgnoreCase("MemoryGetId") || command.equalsIgnoreCase("MGI")) {
                 sendRequest(new MemoryGetId.Request());
-            } else if (command.equalsIgnoreCase("GetInitData")) {
+            } else if (command.equalsIgnoreCase("GetInitData") || command.equalsIgnoreCase("GID")) {
                 sendRequest(new GetInitData.Request());
-            } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Get") || command.equalsIgnoreCase("MIA.Get")) {
-                sendCommand(parameters.getInt(1), new MultiInstanceAssociation.Get(parameters.getInt(2)));
-            } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Set") || command.equalsIgnoreCase("MIA.Set")) {
-                sendCommand(parameters.getInt(1), new MultiInstanceAssociation.Set(parameters.getInt(2), Collections.singletonList(parseAssociatedNode(parameters.getString(3)))));
-            } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Remove") || command.equalsIgnoreCase("MIA.Remove")) {
-                sendCommand(parameters.getInt(1), new MultiInstanceAssociation.Remove(parameters.getInt(2), Collections.singletonList(parseAssociatedNode(parameters.getString(3)))));
-            } else if (command.equalsIgnoreCase("Configuration.Get") || command.equalsIgnoreCase("C.Get")) {
-                sendCommand(parameters.getInt(1), new Configuration.Get(parameters.getInt(2)));
-            } else if (command.equalsIgnoreCase("Configuration.Set") || command.equalsIgnoreCase("C.Set")) {
-                sendCommand(parameters.getInt(1), new Configuration.Set(parameters.getInt(2), new Parameter(parameters.getInt(3), parameters.getInt(4))));
-            } else if (command.equalsIgnoreCase("SwitchBinary.Set") || command.equalsIgnoreCase("SB.Set")) {
-                sendCommand(parameters.getInt(1), new SwitchBinary.Set(parameters.getInt(2) != 0));
-            } else if (command.equalsIgnoreCase("SwitchBinary.Get") || command.equalsIgnoreCase("SB.Get")) {
-                sendCommand(parameters.getInt(1), new SwitchBinary.Get());
+            } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Get") || command.equalsIgnoreCase("MIA.G")) {
+                sendCommand(parameters.getInt(1), new MultiInstanceAssociationCommandClass.Get(parameters.getInt(2)));
+            } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Set") || command.equalsIgnoreCase("MIA.S")) {
+                sendCommand(parameters.getInt(1), new MultiInstanceAssociationCommandClass.Set(parameters.getInt(2), Collections.singletonList(parseAssociatedNode(parameters.getString(3)))));
+            } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Remove") || command.equalsIgnoreCase("MIA.R")) {
+                sendCommand(parameters.getInt(1), new MultiInstanceAssociationCommandClass.Remove(parameters.getInt(2), Collections.singletonList(parseAssociatedNode(parameters.getString(3)))));
+            } else if (command.equalsIgnoreCase("Configuration.Get") || command.equalsIgnoreCase("C.")) {
+                sendCommand(parameters.getInt(1), new ConfigurationCommandClass.Get(parameters.getInt(2)));
+            } else if (command.equalsIgnoreCase("Configuration.Set") || command.equalsIgnoreCase("C.")) {
+                sendCommand(parameters.getInt(1), new ConfigurationCommandClass.Set(parameters.getInt(2), new Parameter(parameters.getInt(3), parameters.getInt(4))));
+            } else if (command.equalsIgnoreCase("SwitchBinary.Set") || command.equalsIgnoreCase("SB.S")) {
+                sendCommand(parameters.getInt(1), new SwitchBinaryCommandClass.Set(parameters.getInt(2) != 0));
+            } else if (command.equalsIgnoreCase("SwitchBinary.Get") || command.equalsIgnoreCase("SB.G")) {
+                sendCommand(parameters.getInt(1), new SwitchBinaryCommandClass.Get());
             } else if (command.equalsIgnoreCase("AddNode")) {
                 sendRequest(new AddNode.Request(AddNode.Request.InclusionMode.fromName(parameters.getString(1))));
             } else if (command.equalsIgnoreCase("Help") || command.equalsIgnoreCase("h")) {

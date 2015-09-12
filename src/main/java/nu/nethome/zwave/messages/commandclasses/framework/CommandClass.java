@@ -17,14 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands.framework;
+package nu.nethome.zwave.messages.commandclasses.framework;
 
-/**
- *
- */
-public interface Command {
-    int getCommandClass();
-    int getCommand();
-
-    byte[] encode();
+public interface CommandClass {
 }

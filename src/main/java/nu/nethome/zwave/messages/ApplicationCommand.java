@@ -22,10 +22,10 @@ package nu.nethome.zwave.messages;
 import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.Message;
 import nu.nethome.zwave.messages.framework.MessageAdaptor;
-import nu.nethome.zwave.messages.commands.framework.Command;
-import nu.nethome.zwave.messages.commands.framework.CommandProcessor;
-import nu.nethome.zwave.messages.commands.framework.MultiCommandProcessor;
-import nu.nethome.zwave.messages.commands.UndecodedCommand;
+import nu.nethome.zwave.messages.commandclasses.framework.Command;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandProcessor;
+import nu.nethome.zwave.messages.commandclasses.framework.MultiCommandProcessor;
+import nu.nethome.zwave.messages.commandclasses.framework.UndecodedCommand;
 import nu.nethome.zwave.messages.framework.MessageProcessorAdaptor;
 
 import java.io.ByteArrayOutputStream;

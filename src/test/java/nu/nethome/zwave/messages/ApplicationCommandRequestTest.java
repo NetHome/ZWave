@@ -20,8 +20,7 @@
 package nu.nethome.zwave.messages;
 
 import nu.nethome.zwave.Hex;
-import nu.nethome.zwave.messages.ApplicationCommand;
-import nu.nethome.zwave.messages.commands.SwitchBinary;
+import nu.nethome.zwave.messages.commandclasses.SwitchBinaryCommandClass;
 import org.junit.Test;
 
 /**
@@ -31,10 +30,10 @@ public class ApplicationCommandRequestTest {
 
     @Test
     public void binarySwitch() throws Exception {
-        ApplicationCommand.Request request = new ApplicationCommand.Request((byte) 2, new SwitchBinary.Set(false));
+        ApplicationCommand.Request request = new ApplicationCommand.Request((byte) 2, new SwitchBinaryCommandClass.Set(false));
         String result = Hex.asHexString(request.encode());
         System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
-        request = new ApplicationCommand.Request((byte) 2, new SwitchBinary.Get());
+        request = new ApplicationCommand.Request((byte) 2, new SwitchBinaryCommandClass.Get());
         result = Hex.asHexString(request.encode());
         System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
     }

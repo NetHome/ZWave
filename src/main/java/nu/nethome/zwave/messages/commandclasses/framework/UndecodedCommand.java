@@ -17,11 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands;
+package nu.nethome.zwave.messages.commandclasses.framework;
 
 import nu.nethome.zwave.Hex;
-import nu.nethome.zwave.messages.commands.framework.CommandAdapter;
-import nu.nethome.zwave.messages.commands.framework.CommandProcessorAdapter;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.util.Arrays;

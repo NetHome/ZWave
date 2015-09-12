@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands;
+package nu.nethome.zwave.messages.commandclasses;
 
 
-import nu.nethome.zwave.messages.commands.framework.CommandAdapter;
-import nu.nethome.zwave.messages.commands.framework.CommandClass;
-import nu.nethome.zwave.messages.commands.framework.CommandProcessorAdapter;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandAdapter;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandClass;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandProcessorAdapter;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.io.ByteArrayOutputStream;
@@ -30,7 +30,7 @@ import java.io.ByteArrayOutputStream;
 /**
  * Configuration command class is used to read and write configuration parameters in nodes
  */
-public class Configuration implements CommandClass {
+public class ConfigurationCommandClass implements CommandClass {
 
     public static final int SET_CONFIGURATION = 0x04;
     public static final int GET_CONFIGURATION = 0x05;

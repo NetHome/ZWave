@@ -17,17 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.home.items.zwave.messages.commands;
-
-import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+package nu.nethome.zwave.messages.commandclasses.framework;
 
 /**
  *
  */
-public class ConfigurationTest {
+public interface Command {
+    int getCommandClass();
+    int getCommand();
 
-
+    byte[] encode();
 }

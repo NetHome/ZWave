@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands;
+package nu.nethome.zwave.messages.commandclasses;
 
-import nu.nethome.zwave.messages.commands.framework.CommandAdapter;
-import nu.nethome.zwave.messages.commands.framework.CommandClass;
-import nu.nethome.zwave.messages.commands.framework.CommandProcessorAdapter;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandAdapter;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandClass;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandProcessorAdapter;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.io.ByteArrayOutputStream;
@@ -32,7 +32,7 @@ import java.util.List;
  * Modifies Association Groups in a node. The MultiInstanceAssociation command class is an extension of the
  * Association command class, where MultiInstanceAssociation can handle nodes with multiple instances/endpoints
  */
-public class MultiInstanceAssociation implements CommandClass {
+public class MultiInstanceAssociationCommandClass implements CommandClass {
 
     public static final int SET_ASSOCIATION = 0x01;
     public static final int GET_ASSOCIATION = 0x02;

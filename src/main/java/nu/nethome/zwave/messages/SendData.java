@@ -20,7 +20,7 @@
 package nu.nethome.zwave.messages;
 
 
-import nu.nethome.zwave.messages.commands.framework.Command;
+import nu.nethome.zwave.messages.commandclasses.framework.Command;
 import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.MessageAdaptor;
 import nu.nethome.zwave.messages.framework.MessageProcessorAdaptor;

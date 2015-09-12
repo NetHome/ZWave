@@ -20,8 +20,8 @@
 package nu.nethome.zwave.messages;
 
 import nu.nethome.zwave.Hex;
-import nu.nethome.zwave.messages.commands.MultiInstanceAssociation;
-import nu.nethome.zwave.messages.commands.SwitchBinary;
+import nu.nethome.zwave.messages.commandclasses.MultiInstanceAssociationCommandClass;
+import nu.nethome.zwave.messages.commandclasses.SwitchBinaryCommandClass;
 import org.junit.Test;
 
 /**
@@ -34,13 +34,13 @@ public class SendDataRequestTest {
 
     @Test
     public void binarySwitch() throws Exception {
-        SendData.Request request = new SendData.Request((byte) 2, new SwitchBinary.Set(true), TRANSMIT_OPTIONS);
+        SendData.Request request = new SendData.Request((byte) 2, new SwitchBinaryCommandClass.Set(true), TRANSMIT_OPTIONS);
         String result = Hex.asHexString(request.encode());
         System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
 //        request = new SendDataRequest((byte) 2, SwitchBinary.report(), TRANSMIT_OPTIONS);
 //        result = Hex.asHexString(request.encode());
 //        System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
-        request = new SendData.Request((byte) 2, new MultiInstanceAssociation.Get(2), TRANSMIT_OPTIONS);
+        request = new SendData.Request((byte) 2, new MultiInstanceAssociationCommandClass.Get(2), TRANSMIT_OPTIONS);
         result = Hex.asHexString(request.encode());
         System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
         GetInitData.Request request1 = new GetInitData.Request();

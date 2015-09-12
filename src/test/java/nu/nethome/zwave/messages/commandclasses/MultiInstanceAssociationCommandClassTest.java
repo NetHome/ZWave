@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.commands;
+package nu.nethome.zwave.messages.commandclasses;
 
 
 import nu.nethome.zwave.Hex;
@@ -30,14 +30,14 @@ import java.util.Arrays;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class MultiInstanceAssociationTest {
+public class MultiInstanceAssociationCommandClassTest {
 
     public static final int TRANSMIT_OPTIONS = SendData.TRANSMIT_OPTION_ACK |
             SendData.TRANSMIT_OPTION_AUTO_ROUTE | SendData.TRANSMIT_OPTION_EXPLORE;
 
     @Test
     public void decodeKnownTestData() throws Exception, DecoderException {
-        MultiInstanceAssociation.Report report = new MultiInstanceAssociation.Report(Hex.hexStringToByteArray("8E0302050006000102"));
+        MultiInstanceAssociationCommandClass.Report report = new MultiInstanceAssociationCommandClass.Report(Hex.hexStringToByteArray("8E0302050006000102"));
         assertThat(report.group, is(2));
         assertThat(report.maxAssociations, is(5));
         assertThat(report.nodes.length, is(2));
@@ -47,7 +47,7 @@ public class MultiInstanceAssociationTest {
 
     @Test
     public void decodeKnownTestData15() throws Exception, DecoderException {
-        MultiInstanceAssociation.Report report = new MultiInstanceAssociation.Report(Hex.hexStringToByteArray("8E03030A00000105"));
+        MultiInstanceAssociationCommandClass.Report report = new MultiInstanceAssociationCommandClass.Report(Hex.hexStringToByteArray("8E03030A00000105"));
         assertThat(report.group, is(3));
         assertThat(report.maxAssociations, is(10));
         assertThat(report.nodes.length, is(1));
@@ -56,7 +56,7 @@ public class MultiInstanceAssociationTest {
 
     @Test
     public void setNode() throws Exception {
-        MultiInstanceAssociation.Set set = new MultiInstanceAssociation.Set(2, Arrays.asList(new AssociatedNode(1, 9), new AssociatedNode(7)));
+        MultiInstanceAssociationCommandClass.Set set = new MultiInstanceAssociationCommandClass.Set(2, Arrays.asList(new AssociatedNode(1, 9), new AssociatedNode(7)));
         SendData.Request request = new SendData.Request((byte) 2, set, TRANSMIT_OPTIONS);
         String result = Hex.asHexString(request.encode());
         System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
@@ -64,7 +64,7 @@ public class MultiInstanceAssociationTest {
 
     @Test
     public void removeNode() throws Exception {
-        MultiInstanceAssociation.Remove remove = new MultiInstanceAssociation.Remove(2, Arrays.asList(new AssociatedNode(1, 9), new AssociatedNode(7)));
+        MultiInstanceAssociationCommandClass.Remove remove = new MultiInstanceAssociationCommandClass.Remove(2, Arrays.asList(new AssociatedNode(1, 9), new AssociatedNode(7)));
         SendData.Request request = new SendData.Request((byte) 2, remove, TRANSMIT_OPTIONS);
         String result = Hex.asHexString(request.encode());
         System.out.println("event,ZWave_Message,Direction,Out,Value," + result);
