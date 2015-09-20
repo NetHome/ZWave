@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 /**
  *
  */
+@SuppressWarnings("UnusedDeclaration")
 public class ZWavePort {
     public static interface Receiver {
         void receiveMessage(byte[] message);
@@ -49,7 +50,6 @@ public class ZWavePort {
     private Receiver receiver;
     protected SerialPort serialPort;
     protected volatile boolean isOpen = false;
-    private List<String> portList;
 
     public ZWavePort(String portName, Receiver receiver) throws PortException {
         this.portName = portName;
@@ -60,11 +60,6 @@ public class ZWavePort {
 
     /**
      * Create for test
-     *
-     * @param portName
-     * @param receiver
-     * @param port
-     * @throws PortException
      */
     ZWavePort(String portName, Receiver receiver, SerialPort port) throws PortException {
         this.portName = portName;
@@ -77,7 +72,7 @@ public class ZWavePort {
     }
 
     private void open() throws PortException {
-        portList = Arrays.asList(SerialPortList.getPortNames());
+        List<String> portList = Arrays.asList(SerialPortList.getPortNames());
         if (!portList.contains(portName)) {
             throw new PortException("Port " + portName + " not Found");
         }

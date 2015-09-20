@@ -47,19 +47,14 @@ public class ZWaveExecutor {
         void print(String Message);
     }
 
-    public static final String ZWAVE_TYPE = "ZWave.Type";
-    public static final String ZWAVE_MESSAGE_TYPE = "ZWave.MessageType";
-    public static final String ZWAVE_EVENT_TYPE = "ZWave_Message";
-
     private MultiMessageProcessor messageProcessor;
-    private MultiCommandProcessor commandProcessor;
     private final MessageSender sender;
     private final Printer printer;
 
     public ZWaveExecutor(MessageSender sender, Printer printer) {
         this.sender = sender;
         this.printer = printer;
-        commandProcessor = new MultiCommandProcessor();
+        MultiCommandProcessor commandProcessor = new MultiCommandProcessor();
         commandProcessor.addCommandProcessor(new CommandCode(MultiInstanceAssociationCommandClass.COMMAND_CLASS, MultiInstanceAssociationCommandClass.ASSOCIATION_REPORT), new MultiInstanceAssociationCommandClass.Report.Processor());
         commandProcessor.addCommandProcessor(new CommandCode(ConfigurationCommandClass.COMMAND_CLASS, ConfigurationCommandClass.REPORT_CONFIGURATION), new ConfigurationCommandClass.Report.Processor());
         commandProcessor.addCommandProcessor(new CommandCode(SwitchBinaryCommandClass.COMMAND_CLASS, SwitchBinaryCommandClass.SWITCH_BINARY_REPORT), new SwitchBinaryCommandClass.Report.Processor());
@@ -141,10 +136,8 @@ public class ZWaveExecutor {
                 } else {
                     print("Unknown message: " + Hex.asHexString(message));
                 }
-            } catch (DecoderException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (DecoderException|IOException e) {
+                print(e.getMessage());
             }
         }
     }
