@@ -61,7 +61,7 @@ public class GetInitData {
             if (in.read() != NUMBER_OF_NODE_BYTES) {
                 throw new DecoderException("Wrong number of node bytes");
             }
-            int nodeId = 0;
+            int nodeId = 1;
             List<Integer> nodes = new ArrayList<>();
             for (int nodeByteCounter = 0; nodeByteCounter < NUMBER_OF_NODE_BYTES; nodeByteCounter++) {
                 int nodeByte = in.read();
