@@ -82,7 +82,7 @@ public class ZWaveExecutor {
                 sendCommand(parameters.getInt(1), new MultiInstanceAssociationCommandClass.Remove(parameters.getInt(2), Collections.singletonList(parseAssociatedNode(parameters.getString(3)))));
             } else if (command.equalsIgnoreCase("Configuration.Get") || command.equalsIgnoreCase("C.G")) {
                 sendCommand(parameters.getInt(1), new ConfigurationCommandClass.Get(parameters.getInt(2)));
-            } else if (command.equalsIgnoreCase("Configuration.Set") || command.equalsIgnoreCase("C.G")) {
+            } else if (command.equalsIgnoreCase("Configuration.Set") || command.equalsIgnoreCase("C.S")) {
                 sendCommand(parameters.getInt(1), new ConfigurationCommandClass.Set(parameters.getInt(2), new Parameter(parameters.getInt(3), parameters.getInt(4))));
             } else if (command.equalsIgnoreCase("SwitchBinary.Set") || command.equalsIgnoreCase("SB.S")) {
                 sendCommand(parameters.getInt(1), new SwitchBinaryCommandClass.Set(parameters.getInt(2) != 0));
