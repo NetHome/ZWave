@@ -10,6 +10,7 @@ import java.util.Queue;
  *
  */
 public class QueueingZWavePort {
+    public static final int SEND_TIMEOUT_MS = 2000;
     private ZWavePort port;
     private ZWavePort.Receiver externalReceiver;
     private Queue<byte[]> sendQueue = new ArrayDeque<>();
@@ -62,11 +63,19 @@ public class QueueingZWavePort {
     }
 
     private synchronized void sendNextMessage() throws SerialPortException {
+        if (outstandingMessage != null && (getNow().getTime() - currentSendTime.getTime()) > SEND_TIMEOUT_MS){
+            // Handle timeout
+            outstandingMessage = null;
+        }
         if (outstandingMessage == null && !sendQueue.isEmpty()) {
             outstandingMessage = sendQueue.poll();
             port.sendMessage(outstandingMessage);
-            currentSendTime = new Date();
+            currentSendTime = getNow();
         }
+    }
+
+    Date getNow() {
+        return new Date();
     }
 
     private synchronized void processNextMessage() throws SerialPortException {
