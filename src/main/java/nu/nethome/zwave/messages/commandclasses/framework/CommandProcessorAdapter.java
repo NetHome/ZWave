@@ -19,8 +19,9 @@
 
 package nu.nethome.zwave.messages.commandclasses.framework;
 
+import nu.nethome.zwave.messages.commandclasses.NodeInstance;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 public abstract class CommandProcessorAdapter<T>  implements CommandProcessor {
-    protected T process(T command) throws DecoderException {return command;}
+    protected T process(T command, NodeInstance node) throws DecoderException {return command;}
 }

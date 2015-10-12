@@ -58,6 +58,7 @@ public class ZWaveExecutor {
         commandProcessor.addCommandProcessor(new CommandCode(MultiInstanceAssociationCommandClass.COMMAND_CLASS, MultiInstanceAssociationCommandClass.ASSOCIATION_REPORT), new MultiInstanceAssociationCommandClass.Report.Processor());
         commandProcessor.addCommandProcessor(new CommandCode(ConfigurationCommandClass.COMMAND_CLASS, ConfigurationCommandClass.REPORT_CONFIGURATION), new ConfigurationCommandClass.Report.Processor());
         commandProcessor.addCommandProcessor(new CommandCode(SwitchBinaryCommandClass.COMMAND_CLASS, SwitchBinaryCommandClass.SWITCH_BINARY_REPORT), new SwitchBinaryCommandClass.Report.Processor());
+        commandProcessor.addCommandProcessor(new CommandCode(SwitchBinaryCommandClass.COMMAND_CLASS, SwitchBinaryCommandClass.SWITCH_BINARY_SET), new SwitchBinaryCommandClass.Set.Processor());
         messageProcessor = new MultiMessageProcessor();
         messageProcessor.addMessageProcessor(MemoryGetId.MEMORY_GET_ID, new MemoryGetId.Response.Processor());
         messageProcessor.addMessageProcessor(SendData.REQUEST_ID, new SendData.Response.Processor());

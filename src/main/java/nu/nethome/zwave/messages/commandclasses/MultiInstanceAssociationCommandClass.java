@@ -139,8 +139,8 @@ public class MultiInstanceAssociationCommandClass implements CommandClass {
 
         public static class Processor extends CommandProcessorAdapter<Report> {
             @Override
-            public Report process(byte[] command, int node) throws DecoderException {
-                return process(new Report(command));
+            public Report process(byte[] command, NodeInstance node) throws DecoderException {
+                return process(new Report(command), node);
             }
         }
     }

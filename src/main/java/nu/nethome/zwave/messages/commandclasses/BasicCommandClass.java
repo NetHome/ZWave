@@ -30,24 +30,24 @@ import java.io.ByteArrayOutputStream;
 /**
  *
  */
-public class SwitchBinaryCommandClass implements CommandClass {
+public class BasicCommandClass implements CommandClass {
 
-    public static final int SWITCH_BINARY_SET = 0x01;
-    public static final int SWITCH_BINARY_GET = 0x02;
-    public static final int SWITCH_BINARY_REPORT = 0x03;
+    public static final int SET = 0x01;
+    public static final int GET = 0x02;
+    public static final int REPORT = 0x03;
 
-    public static final byte COMMAND_CLASS = (byte) 0x25;
+    public static final byte COMMAND_CLASS = (byte) 0x20;
 
     public static class Set extends CommandAdapter {
         public final boolean isOn;
 
         public Set(boolean on) {
-            super(COMMAND_CLASS, SWITCH_BINARY_SET);
+            super(COMMAND_CLASS, SET);
             isOn = on;
         }
 
         public Set(byte[] data) throws DecoderException {
-            super(data, COMMAND_CLASS, SWITCH_BINARY_SET);
+            super(data, COMMAND_CLASS, SET);
             isOn = (in.read() > 0);
         }
 
@@ -67,7 +67,7 @@ public class SwitchBinaryCommandClass implements CommandClass {
 
     public static class Get extends CommandAdapter {
         public Get() {
-            super(COMMAND_CLASS, SWITCH_BINARY_GET);
+            super(COMMAND_CLASS, GET);
         }
     }
 
@@ -75,7 +75,7 @@ public class SwitchBinaryCommandClass implements CommandClass {
         public final boolean isOn;
 
         public Report(byte[] data) throws DecoderException {
-            super(data, COMMAND_CLASS, SWITCH_BINARY_REPORT);
+            super(data, COMMAND_CLASS, REPORT);
             isOn = (in.read() > 0);
         }
 
@@ -94,7 +94,7 @@ public class SwitchBinaryCommandClass implements CommandClass {
 
         @Override
         public String toString() {
-            return String.format("SwitchBinary.Report(value:%d)", isOn ? 1 : 0);
+            return String.format("Basic.Report(value:%d)", isOn ? 1 : 0);
         }
     }
 }
