@@ -63,6 +63,11 @@ public class BasicCommandClass implements CommandClass {
             super.addCommandData(result);
             result.write(isOn ? 0xFF : 0);
         }
+
+        @Override
+        public String toString() {
+            return String.format("Basic.Set(value:%d)", isOn ? 1 : 0);
+        }
     }
 
     public static class Get extends CommandAdapter {
