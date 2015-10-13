@@ -21,11 +21,8 @@ package nu.nethome.zwave.messages.commandclasses;
 
 import nu.nethome.zwave.messages.commandclasses.framework.*;
 import nu.nethome.zwave.messages.framework.DecoderException;
-import nu.nethome.zwave.messages.framework.Message;
-import nu.nethome.zwave.messages.framework.MessageProcessorAdaptor;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 /**
  *
@@ -35,7 +32,7 @@ public class MultiInstanceCommandClass implements CommandClass {
     // Version 1
     public static final int GET = 0x04;
     public static final int REPORT = 0x05;
-    public static final int V1_ENCAP = 0x06;
+    public static final int ENCAP_V1 = 0x06;
 
     // Version 2
     public static final int ENDPOINT_GET = 0x07;
@@ -44,17 +41,17 @@ public class MultiInstanceCommandClass implements CommandClass {
     public static final int CAPABILITY_REPORT = 0x0a;
     public static final int ENDPOINT_FIND = 0x0b;
     public static final int ENDPOINT_FIND_REPORT = 0x0c;
-    public static final int V2_ENCAP = 0x0d;
+    public static final int ENCAP_V2 = 0x0d;
 
     public static final int COMMAND_CLASS = 0x60;
     public static final int ENCAPSULATION_HEADER_LENGTH = 4;
 
-    public static class Encapsulation extends CommandAdapter {
+    public static class EncapsulationV2 extends CommandAdapter {
         public final int instance;
         public final Command command;
 
-        public Encapsulation(int instance, Command command) {
-            super(COMMAND_CLASS, V2_ENCAP);
+        public EncapsulationV2(int instance, Command command) {
+            super(COMMAND_CLASS, ENCAP_V2);
             this.instance = instance;
             this.command = command;
         }
@@ -68,8 +65,8 @@ public class MultiInstanceCommandClass implements CommandClass {
             result.write(commandData, 0, commandData.length);
         }
 
-        public Encapsulation(byte[] data) throws DecoderException {
-            super(data, COMMAND_CLASS, V2_ENCAP);
+        public EncapsulationV2(byte[] data) throws DecoderException {
+            super(data, COMMAND_CLASS, ENCAP_V2);
             in.read(); // ?? Seems to be 0
             instance = in.read();
             int commandLength = data.length - ENCAPSULATION_HEADER_LENGTH;
@@ -80,10 +77,10 @@ public class MultiInstanceCommandClass implements CommandClass {
 
         @Override
         public String toString() {
-            return String.format("MultiInstance.Encapsulation(instance:%d, command:{%s})", instance, command.toString());
+            return String.format("MultiInstance.EncapsulationV2(instance:%d, command:{%s})", instance, command.toString());
         }
 
-        public static class Processor extends CommandProcessorAdapter<Encapsulation> {
+        public static class Processor extends CommandProcessorAdapter<EncapsulationV2> {
 
             private CommandProcessor commandProcessor;
 
@@ -96,14 +93,14 @@ public class MultiInstanceCommandClass implements CommandClass {
             }
 
             @Override
-            public Encapsulation process(byte[] command, NodeInstance node) throws DecoderException {
-                return process(new Encapsulation(command), node);
+            public EncapsulationV2 process(byte[] command, NodeInstance node) throws DecoderException {
+                return process(new EncapsulationV2(command), node);
             }
 
             @Override
-            protected Encapsulation process(Encapsulation command, NodeInstance node) throws DecoderException {
+            protected EncapsulationV2 process(EncapsulationV2 command, NodeInstance node) throws DecoderException {
                 Command realCommand = commandProcessor.process(command.command.encode(), new NodeInstance(node.node, command.instance));
-                return new Encapsulation(command.instance, realCommand);
+                return new EncapsulationV2(command.instance, realCommand);
             }
         }
     }
