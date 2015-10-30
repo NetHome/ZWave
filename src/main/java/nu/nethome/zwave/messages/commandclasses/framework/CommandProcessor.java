@@ -19,9 +19,9 @@
 
 package nu.nethome.zwave.messages.commandclasses.framework;
 
-import nu.nethome.zwave.messages.commandclasses.NodeInstance;
+import nu.nethome.zwave.messages.commandclasses.CommandArgument;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 public interface CommandProcessor {
-    Command process(byte[] command, NodeInstance node) throws DecoderException;
+    Command process(byte[] command, CommandArgument argument) throws DecoderException;
 }

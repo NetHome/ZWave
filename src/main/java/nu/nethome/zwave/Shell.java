@@ -27,7 +27,7 @@ import java.io.InputStreamReader;
 
 public class Shell {
     ZWaveExecutor executor;
-    ZWavePort port;
+    QueueingZWavePort port;
     private NetHomePort netHomePort;
 
     public static void main(String[] args) throws PortException, IOException {
@@ -39,7 +39,7 @@ public class Shell {
     }
 
     private void runWithLocalPort(String portname) throws PortException, IOException {
-        port = new ZWavePort(portname, new ZWavePort.Receiver() {
+        port = new QueueingZWavePort(portname, new ZWavePort.Receiver() {
             @Override
             public void receiveMessage(byte[] message) {
                 executor.processZWaveMessage(message);

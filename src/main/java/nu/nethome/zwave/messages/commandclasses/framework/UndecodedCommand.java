@@ -20,7 +20,7 @@
 package nu.nethome.zwave.messages.commandclasses.framework;
 
 import nu.nethome.zwave.Hex;
-import nu.nethome.zwave.messages.commandclasses.NodeInstance;
+import nu.nethome.zwave.messages.commandclasses.CommandArgument;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.util.Arrays;
@@ -39,8 +39,8 @@ public class UndecodedCommand extends CommandAdapter {
 
     public static class Processor extends CommandProcessorAdapter<UndecodedCommand> {
         @Override
-        public UndecodedCommand process(byte[] command, NodeInstance node) throws DecoderException {
-            return process(new UndecodedCommand(command), node);
+        public UndecodedCommand process(byte[] command, CommandArgument argument) throws DecoderException {
+            return process(new UndecodedCommand(command), argument);
         }
     }
 

@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- *
+ * ZWave communication port for sending raw ZWave messages via a serial port to a ZWave controller.
+ * The ZWawePort handles the packaging of the ZWave messages, with frame start byte, message length encoding
+ * and checksum, so the input and output from the port is raw ZWave byte strings with messages.
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ZWavePort {

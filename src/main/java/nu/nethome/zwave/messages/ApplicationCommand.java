@@ -19,7 +19,7 @@
 
 package nu.nethome.zwave.messages;
 
-import nu.nethome.zwave.messages.commandclasses.NodeInstance;
+import nu.nethome.zwave.messages.commandclasses.CommandArgument;
 import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.Message;
 import nu.nethome.zwave.messages.framework.MessageAdaptor;
@@ -62,7 +62,7 @@ public class ApplicationCommand {
         public Request(byte[] data) throws IOException, DecoderException {
             this(data, new CommandProcessor() {
                 @Override
-                public Command process(byte[] commandData, NodeInstance node) throws DecoderException {
+                public Command process(byte[] commandData, CommandArgument argument) throws DecoderException {
                     return new UndecodedCommand(commandData);
                 }
             });
@@ -75,7 +75,7 @@ public class ApplicationCommand {
             int commandLength = in.read();
             byte[] commandData = new byte[commandLength];
             in.read(commandData);
-            command = processor.process(commandData, new NodeInstance(node));
+            command = processor.process(commandData, new CommandArgument(node));
         }
 
         @Override

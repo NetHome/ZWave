@@ -19,7 +19,7 @@
 
 package nu.nethome.zwave.messages.commandclasses.framework;
 
-import nu.nethome.zwave.messages.commandclasses.NodeInstance;
+import nu.nethome.zwave.messages.commandclasses.CommandArgument;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.util.HashMap;
@@ -39,12 +39,12 @@ public class MultiCommandProcessor implements CommandProcessor {
     }
 
     @Override
-    public Command process(byte[] message, NodeInstance node) throws DecoderException {
+    public Command process(byte[] message, CommandArgument argument) throws DecoderException {
         CommandProcessor processor = processors.get(CommandAdapter.decodeCommandCode(message));
         if (processor != null) {
-            return processor.process(message, node);
+            return processor.process(message, argument);
         }
-        return defaultProcessor.process(message, node);
+        return defaultProcessor.process(message, argument);
     }
 
     public void addCommandProcessor(CommandCode command, CommandProcessor processor) {

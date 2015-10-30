@@ -93,13 +93,13 @@ public class MultiInstanceCommandClass implements CommandClass {
             }
 
             @Override
-            public EncapsulationV2 process(byte[] command, NodeInstance node) throws DecoderException {
-                return process(new EncapsulationV2(command), node);
+            public EncapsulationV2 process(byte[] command, CommandArgument argument) throws DecoderException {
+                return process(new EncapsulationV2(command), argument);
             }
 
             @Override
-            protected EncapsulationV2 process(EncapsulationV2 command, NodeInstance node) throws DecoderException {
-                Command realCommand = commandProcessor.process(command.command.encode(), new NodeInstance(node.node, command.instance));
+            protected EncapsulationV2 process(EncapsulationV2 command, CommandArgument node) throws DecoderException {
+                Command realCommand = commandProcessor.process(command.command.encode(), new CommandArgument(node.sourceNode, command.instance));
                 return new EncapsulationV2(command.instance, realCommand);
             }
         }

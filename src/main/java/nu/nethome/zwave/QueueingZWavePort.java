@@ -7,7 +7,8 @@ import java.util.Date;
 import java.util.Queue;
 
 /**
- *
+ * An extension of the ZWavePort that adds a send queue and the ability to resend messages that was not properly
+ * received by the ZWave controller.
  */
 public class QueueingZWavePort {
     public static final int SEND_TIMEOUT_MS = 2000;
@@ -87,5 +88,9 @@ public class QueueingZWavePort {
         if (outstandingMessage != null) {
             port.sendMessage(outstandingMessage);
         }
+    }
+
+    public void close() {
+        port.close();
     }
 }

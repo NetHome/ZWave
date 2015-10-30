@@ -53,8 +53,8 @@ public class BasicCommandClass implements CommandClass {
 
         public static class Processor extends CommandProcessorAdapter<Set> {
             @Override
-            public Set process(byte[] command, NodeInstance node) throws DecoderException {
-                return process(new Set(command), node);
+            public Set process(byte[] command, CommandArgument argument) throws DecoderException {
+                return process(new Set(command), argument);
             }
         }
 
@@ -92,8 +92,8 @@ public class BasicCommandClass implements CommandClass {
 
         public static class Processor extends CommandProcessorAdapter<Report> {
             @Override
-            public Report process(byte[] command, NodeInstance node) throws DecoderException {
-                return process(new Report(command), node);
+            public Report process(byte[] command, CommandArgument argument) throws DecoderException {
+                return process(new Report(command), argument);
             }
         }
 
