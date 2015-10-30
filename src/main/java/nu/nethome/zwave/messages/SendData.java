@@ -21,6 +21,7 @@ package nu.nethome.zwave.messages;
 
 
 import nu.nethome.zwave.messages.commandclasses.framework.Command;
+import nu.nethome.zwave.messages.commandclasses.framework.UndecodedCommand;
 import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.MessageAdaptor;
 import nu.nethome.zwave.messages.framework.MessageProcessorAdaptor;
@@ -54,6 +55,15 @@ public class SendData {
             nextCallbackId = (nextCallbackId + 1) & 0xFF;
         }
 
+        public Request(byte[] message) throws DecoderException {
+            super(message, REQUEST_ID, Type.REQUEST);
+            node = (byte)in.read();
+            int commandLength = in.read();
+            command = new UndecodedCommand(new byte[0]);
+            transmitOptions = in.read();
+            callbackId = in.read();
+        }
+
         @Override
         protected void addRequestData(ByteArrayOutputStream result) throws IOException {
             byte[] commandData = command.encode();
@@ -63,6 +73,18 @@ public class SendData {
             result.write(commandData);
             result.write(transmitOptions);
             result.write(callbackId);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("SendData.Request(node=%d, transmitOptions=%d, callbackId=%d)", node, transmitOptions, callbackId);
+        }
+
+        public static class Processor extends MessageProcessorAdaptor<Request> {
+            @Override
+            public Request process(byte[] command) throws DecoderException {
+                return process(new Request(command));
+            }
         }
     }
 

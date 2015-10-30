@@ -67,6 +67,11 @@ public class Shell {
                 new ZWaveExecutor.Printer() {
                     @Override
                     public void print(String message) {
+                        System.out.print(message);
+                    }
+
+                    @Override
+                    public void println(String message) {
                         System.out.println(message);
                     }
                 }
@@ -102,6 +107,11 @@ public class Shell {
                 new ZWaveExecutor.Printer() {
                     @Override
                     public void print(String message) {
+                        System.out.print(message);
+                    }
+
+                    @Override
+                    public void println(String message) {
                         System.out.println(message);
                     }
                 }

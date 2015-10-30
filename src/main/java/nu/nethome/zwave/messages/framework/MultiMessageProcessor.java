@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class MultiMessageProcessor implements MessageProcessor {
 
-    Map<Integer, MessageProcessor> processors = new HashMap<>();
+    Map<MessageId, MessageProcessor> processors = new HashMap<>();
 
     @Override
     public Message process(byte[] message) throws DecoderException, IOException {
@@ -39,7 +39,7 @@ public class MultiMessageProcessor implements MessageProcessor {
         return null;
     }
 
-    public void addMessageProcessor(int messageId, MessageProcessor processor) {
-        processors.put(messageId, processor);
+    public void addMessageProcessor(int messageId, Message.Type type, MessageProcessor processor) {
+        processors.put(new MessageId(messageId, type), processor);
     }
 }

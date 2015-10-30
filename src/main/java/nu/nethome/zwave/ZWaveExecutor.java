@@ -44,7 +44,8 @@ public class ZWaveExecutor {
     }
 
     public interface Printer {
-        void print(String Message);
+        void println(String message);
+        void print(String message);
     }
 
     private MultiMessageProcessor messageProcessor;
@@ -63,11 +64,13 @@ public class ZWaveExecutor {
         commandProcessor.addCommandProcessor(new CommandCode(BasicCommandClass.COMMAND_CLASS, BasicCommandClass.SET), new BasicCommandClass.Set.Processor());
         commandProcessor.addCommandProcessor(new CommandCode(MultiInstanceCommandClass.COMMAND_CLASS, MultiInstanceCommandClass.ENCAP_V2), new MultiInstanceCommandClass.EncapsulationV2.Processor(commandProcessor));
         messageProcessor = new MultiMessageProcessor();
-        messageProcessor.addMessageProcessor(MemoryGetId.MEMORY_GET_ID, new MemoryGetId.Response.Processor());
-        messageProcessor.addMessageProcessor(SendData.REQUEST_ID, new SendData.Response.Processor());
-        messageProcessor.addMessageProcessor(AddNode.REQUEST_ID, new AddNode.Event.Processor());
-        messageProcessor.addMessageProcessor(GetInitData.REQUEST_ID, new GetInitData.Response.Processor());
-        messageProcessor.addMessageProcessor(ApplicationCommand.REQUEST_ID, new ApplicationCommand.Request.Processor(commandProcessor));
+        messageProcessor.addMessageProcessor(MemoryGetId.MEMORY_GET_ID, Message.Type.RESPONSE, new MemoryGetId.Response.Processor());
+        messageProcessor.addMessageProcessor(SendData.REQUEST_ID, Message.Type.REQUEST, new SendData.Request.Processor());
+        messageProcessor.addMessageProcessor(SendData.REQUEST_ID, Message.Type.RESPONSE, new SendData.Response.Processor());
+        messageProcessor.addMessageProcessor(AddNode.REQUEST_ID, Message.Type.REQUEST, new AddNode.Event.Processor());
+        messageProcessor.addMessageProcessor(GetInitData.REQUEST_ID, Message.Type.RESPONSE, new GetInitData.Response.Processor());
+        messageProcessor.addMessageProcessor(ApplicationCommand.REQUEST_ID, Message.Type.REQUEST, new ApplicationCommand.Request.Processor(commandProcessor));
+        printPrompt();
     }
 
     public String executeCommandLine(String commandLine) {
@@ -94,22 +97,31 @@ public class ZWaveExecutor {
                 sendCommand(parameters.getInt(1), new SwitchBinaryCommandClass.Get());
             } else if (command.equalsIgnoreCase("AddNode")) {
                 sendRequest(new AddNode.Request(AddNode.Request.InclusionMode.fromName(parameters.getString(1))));
+            }else if (command.equalsIgnoreCase("RequestNodeInfo") || command.equalsIgnoreCase("RNI")) {
+                sendRequest(new RequstNodeInfo.Request(parameters.getInt(1)));
             } else if (command.equalsIgnoreCase("Help") || command.equalsIgnoreCase("h")) {
-                print("MemoryGetId");
-                print("GetInitData");
-                print("AddNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
-                print("MultiInstanceAssociation.Get node association");
-                print("MultiInstanceAssociation.Set node association associatedNode");
-                print("MultiInstanceAssociation.Remove node association associatedNode");
-                print("Configuration.Get node parameter");
-                print("Configuration.Set node parameter value length");
-                print("SwitchBinary.Get node");
-                print("SwitchBinary.Set node [0 1]");
+                println("MemoryGetId");
+                println("GetInitData");
+                println("AddNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
+                println("MultiInstanceAssociation.Get node association");
+                println("MultiInstanceAssociation.Set node association associatedNode");
+                println("MultiInstanceAssociation.Remove node association associatedNode");
+                println("Configuration.Get node parameter");
+                println("Configuration.Set node parameter value length");
+                println("SwitchBinary.Get node");
+                println("SwitchBinary.Set node [0 1]");
+            } else {
+                println("Error: Unknown command");
             }
         } catch (Exception | DecoderException e) {
-            print("Error: " + e.getMessage());
+            println("Error: " + e.getMessage());
         }
+        printPrompt();
         return "";
+    }
+
+    private void printPrompt() {
+        print("> ");
     }
 
     private void sendCommand(int node, Command command) {
@@ -122,28 +134,30 @@ public class ZWaveExecutor {
     }
 
     public void processZWaveMessage(byte[] message) {
+        print("<< ");
         if (message.length == 1) {
             if (message[0] == ZWavePort.ACK) {
-                print("ACK");
+                println("ACK");
             } else if (message[0] == ZWavePort.NAK) {
-                print("NAK");
+                println("NAK");
             } else if (message[0] == ZWavePort.CAN) {
-                print("CAN");
+                println("CAN");
             } else if (message[0] == ZWavePort.SOF) {
-                print("SOF");
+                println("SOF");
             }
         } else {
             try {
                 Message received = messageProcessor.process(message);
                 if (received != null) {
-                    print(received.toString() + "\n\r");
+                    println(received.toString());
                 } else {
-                    print("Unknown message: " + Hex.asHexString(message));
+                    println("Unknown message: " + Hex.asHexString(message));
                 }
             } catch (DecoderException|IOException e) {
-                print(e.getMessage());
+                println(e.getMessage());
             }
         }
+        printPrompt();
     }
 
     private AssociatedNode parseAssociatedNode(String s) {
@@ -152,6 +166,10 @@ public class ZWaveExecutor {
             return new AssociatedNode(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
         }
         return new AssociatedNode(Integer.parseInt(s));
+    }
+
+    private void println(String string) {
+        printer.println(string);
     }
 
     private void print(String string) {

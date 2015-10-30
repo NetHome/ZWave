@@ -38,12 +38,16 @@ public class MessageAdaptor implements Message {
         in = new ByteArrayInputStream(messageData);
         this.requestId = requestId;
         this.type = type;
-        DecoderException.assertTrue(in.read() == (type == Type.REQUEST ? 0 : 1), "Unexpected message type");
+        int requestType = in.read();
+        DecoderException.assertTrue(requestType == (type == Type.REQUEST ? 0 : 1), "Unexpected request type: " + requestType);
         DecoderException.assertTrue(in.read() == requestId, "Unexpected message type");
     }
 
-    public static int decodeMessageId(byte[] message) {
-        return (message != null && message.length >= 2) ? ((int)(message[1])) & 0xFF : 0;
+    public static MessageId decodeMessageId(byte[] message) {
+        if (message == null || message.length < 2) {
+            return new MessageId(0, Type.REQUEST);
+        }
+        return new MessageId(((int)(message[1])) & 0xFF, message[0] == 0 ? Type.REQUEST : Type.RESPONSE);
     }
 
     @Override
