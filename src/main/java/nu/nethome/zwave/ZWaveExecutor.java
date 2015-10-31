@@ -70,6 +70,7 @@ public class ZWaveExecutor {
         messageProcessor.addMessageProcessor(AddNode.REQUEST_ID, Message.Type.REQUEST, new AddNode.Event.Processor());
         messageProcessor.addMessageProcessor(GetInitData.REQUEST_ID, Message.Type.RESPONSE, new GetInitData.Response.Processor());
         messageProcessor.addMessageProcessor(ApplicationCommand.REQUEST_ID, Message.Type.REQUEST, new ApplicationCommand.Request.Processor(commandProcessor));
+        messageProcessor.addMessageProcessor(ApplicationUpdate.REQUEST_ID, Message.Type.REQUEST, new ApplicationUpdate.Event.Processor());
         printPrompt();
     }
 
@@ -103,6 +104,7 @@ public class ZWaveExecutor {
                 println("MemoryGetId");
                 println("GetInitData");
                 println("AddNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
+                println("RequestNodeInfo node ");
                 println("MultiInstanceAssociation.Get node association");
                 println("MultiInstanceAssociation.Set node association associatedNode");
                 println("MultiInstanceAssociation.Remove node association associatedNode");

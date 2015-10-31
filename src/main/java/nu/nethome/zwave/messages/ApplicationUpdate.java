@@ -29,34 +29,39 @@ import java.io.IOException;
 /**
  * Controller responds with: ApplicationUpdate(0x49)
  */
-public class RequstNodeInfo {
+public class ApplicationUpdate {
 
-    public static final byte REQUEST_ID = (byte)0x60;
+    public static final byte REQUEST_ID = (byte)0x49;
+    public static final int NODE_INFO_RECEIVED = 0x84;
+    public static final int NODE_INFO_REQ_DONE = 0x82;
+    public static final int NODE_INFO_REQ_FAILED = 0x81;
+    public static final int ROUTING_PENDING = 0x80;
+    public static final int NEW_ID_ASSIGNED = 0x40;
+    public static final int DELETE_DONE = 0x20;
+    public static final int SUC_ID = 0x10;
 
-    public static class Request extends MessageAdaptor {
-        private int node;
-
-
-        public Request(int node) {
-            super(REQUEST_ID, Type.REQUEST);
-            this.node = node;
-        }
-
-        @Override
-        protected void addRequestData(ByteArrayOutputStream result) throws IOException {
-            super.addRequestData(result);
-            result.write(node);
-        }
-    }
 
     public static class Event extends MessageAdaptor {
         public final int nodeId;
+        public final int updateState;
+        public final byte[] commandClasses;
 
 
         public Event(byte[] message) throws DecoderException {
             super(message, REQUEST_ID, Type.REQUEST);
-            in.read(); // ??
-            nodeId = in.read();
+            updateState = in.read();
+            if (updateState == NODE_INFO_RECEIVED) {
+                nodeId = in.read();
+                int numberOfCommandClasses = in.read() - 3;
+                in.read();
+                in.read();
+                in.read();
+                commandClasses = new byte[numberOfCommandClasses];
+                in.read(commandClasses, 0, numberOfCommandClasses);
+            } else {
+                nodeId = 0;
+                commandClasses = new byte[0];
+            }
         }
 
         public static class Processor extends MessageProcessorAdaptor<Event> {
@@ -68,7 +73,13 @@ public class RequstNodeInfo {
 
         @Override
         public String toString() {
-            return String.format("RequestNodeInfo.Event: node: %d", nodeId);
+            String commandClassesString = "";
+            String separator = "";
+            for (byte commandClass : commandClasses) {
+                commandClassesString += String.format("%s%02X", separator, commandClass);
+                separator = ",";
+            }
+            return String.format("ApplicationUpdate.Event(node:%d, classes:%s)", nodeId, commandClassesString);
         }
     }
 }
