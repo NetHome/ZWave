@@ -80,7 +80,7 @@ public class ApplicationCommand {
 
         @Override
         public String toString() {
-            return String.format("ApplicationCommand.Request(node:%d, command:{%s})", node, command.toString());
+            return String.format("{\"ApplicationCommand.Request\":{\"node\":\"%d\", \"command\":%s}}", node, command.toString());
         }
 
         public static class Processor extends MessageProcessorAdaptor<Request> {

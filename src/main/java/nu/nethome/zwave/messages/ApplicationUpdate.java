@@ -31,7 +31,7 @@ import java.io.IOException;
  */
 public class ApplicationUpdate {
 
-    public static final byte REQUEST_ID = (byte)0x49;
+    public static final byte REQUEST_ID = (byte) 0x49;
     public static final int NODE_INFO_RECEIVED = 0x84;
     public static final int NODE_INFO_REQ_DONE = 0x82;
     public static final int NODE_INFO_REQ_FAILED = 0x81;
@@ -76,10 +76,16 @@ public class ApplicationUpdate {
             String commandClassesString = "";
             String separator = "";
             for (byte commandClass : commandClasses) {
-                commandClassesString += String.format("%s%02X", separator, commandClass);
-                separator = ",";
+                int cc = ((int) commandClass) & 0xFF;
+                if (cc != 239) {
+                    commandClassesString += String.format("%s%d", separator, cc);
+                    separator = ",";
+                } else {
+                    commandClassesString += "],[";
+                    separator = "";
+                }
             }
-            return String.format("ApplicationUpdate.Event(node:%d, classes:%s)", nodeId, commandClassesString);
+            return String.format("{\"ApplicationUpdate.Event\": {\"node\": %d, \"classes\": [[%s]]}}", nodeId, commandClassesString);
         }
     }
 }

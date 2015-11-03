@@ -122,7 +122,7 @@ public class  AddNode {
 
         @Override
         public String toString() {
-            return String.format("AddNode.Event: status: %s, node: %d", status.name(), nodeId);
+            return String.format("{\"AddNode.Event\": {\"status\": \"%s\", \"node\": %d}}", status.name(), nodeId);
         }
     }
 }

@@ -77,7 +77,7 @@ public class SendData {
 
         @Override
         public String toString() {
-            return String.format("SendData.Request(node=%d, transmitOptions=%d, callbackId=%d)", node, transmitOptions, callbackId);
+            return String.format("{\"SendData.Request\": {\"node\": %d, \"transmitOptions\": %d, \"callbackId\": %d}}", node, transmitOptions, callbackId);
         }
 
         public static class Processor extends MessageProcessorAdaptor<Request> {
@@ -105,7 +105,7 @@ public class SendData {
 
         @Override
         public String toString() {
-            return String.format("SendData.Response(callbackId=%d, status=%d)", callbackId, status == null ? -1 : status);
+            return String.format("{\"SendData.Response\": {\"callbackId\": %d, \"status\": %d}}", callbackId, status == null ? -1 : status);
         }
 
         public static class Processor extends MessageProcessorAdaptor<Response> {

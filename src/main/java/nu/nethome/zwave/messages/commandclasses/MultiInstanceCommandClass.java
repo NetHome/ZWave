@@ -77,7 +77,7 @@ public class MultiInstanceCommandClass implements CommandClass {
 
         @Override
         public String toString() {
-            return String.format("MultiInstance.EncapsulationV2(instance:%d, command:{%s})", instance, command.toString());
+            return String.format("{\"MultiInstance.EncapsulationV2\": {\"instance\": \"%d\", \"command\": %s}}", instance, command.toString());
         }
 
         public static class Processor extends CommandProcessorAdapter<EncapsulationV2> {

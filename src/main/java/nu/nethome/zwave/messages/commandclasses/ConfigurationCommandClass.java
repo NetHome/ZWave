@@ -90,7 +90,7 @@ public class ConfigurationCommandClass implements CommandClass {
 
         @Override
         public String toString() {
-            return String.format("Parameter.Report(parameter:%d, value:%s)", configurationId, parameter.toString());
+            return String.format("{\"Parameter.Report\": {\"parameter\": %d, \"value\": %s)", configurationId, parameter.toString());
         }
     }
 }

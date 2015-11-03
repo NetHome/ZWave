@@ -66,7 +66,7 @@ public class BasicCommandClass implements CommandClass {
 
         @Override
         public String toString() {
-            return String.format("Basic.Set(value:%d)", isOn ? 1 : 0);
+            return String.format("{\"Basic.Set\": {\"value\": %d}}", isOn ? 1 : 0);
         }
     }
 

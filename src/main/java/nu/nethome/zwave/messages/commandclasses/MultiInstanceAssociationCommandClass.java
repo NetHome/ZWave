@@ -134,7 +134,7 @@ public class MultiInstanceAssociationCommandClass implements CommandClass {
                 nodesString += separator + node;
                 separator = ", ";
             }
-            return String.format("MultiInstanceAssociation.Report(group:%d, max:%d, following: %d, nodes: %s)", group, maxAssociations, reportsToFollow, nodesString);
+            return String.format("{\"MultiInstanceAssociation.Report\": {\"group\": %d, \"max\": %d, \"following\": %d, \"nodes\": [%s]}}", group, maxAssociations, reportsToFollow, nodesString);
         }
 
         public static class Processor extends CommandProcessorAdapter<Report> {

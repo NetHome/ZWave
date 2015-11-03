@@ -94,7 +94,7 @@ public class SwitchBinaryCommandClass implements CommandClass {
 
         @Override
         public String toString() {
-            return String.format("SwitchBinary.Report(value:%d)", isOn ? 1 : 0);
+            return String.format("{\"SwitchBinary.Report\":{\"value\": %d}}", isOn ? 1 : 0);
         }
     }
 }

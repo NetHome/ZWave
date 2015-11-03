@@ -136,7 +136,6 @@ public class ZWaveExecutor {
     }
 
     public void processZWaveMessage(byte[] message) {
-        print("<< ");
         if (message.length == 1) {
             if (message[0] == ZWavePort.ACK) {
                 println("ACK");

@@ -68,7 +68,7 @@ public class RequstNodeInfo {
 
         @Override
         public String toString() {
-            return String.format("RequestNodeInfo.Event: node: %d", nodeId);
+            return String.format("{\"RequestNodeInfo.Event\": {\"node\": %d}}", nodeId);
         }
     }
 }
