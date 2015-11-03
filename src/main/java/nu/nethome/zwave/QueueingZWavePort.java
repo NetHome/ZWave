@@ -93,4 +93,8 @@ public class QueueingZWavePort {
     public void close() {
         port.close();
     }
+
+    public boolean isOpen() {
+        return port.isOpen();
+    }
 }

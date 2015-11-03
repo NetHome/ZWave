@@ -27,7 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Controller responds with: ApplicationUpdate(0x49)
+ *
  */
 public class ApplicationUpdate {
 

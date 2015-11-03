@@ -17,6 +17,6 @@ public class GetInitDataTest {
 
         assertThat(response.mode, is(GetInitData.ControllerMode.CONTROLLER));
         assertThat(response.type, is(GetInitData.ControllerType.PRIMARY));
-        assertThat(response.nodes, hasItems(0, 1, 5));
+        assertThat(response.nodes, hasItems(1, 2, 6));
     }
 }

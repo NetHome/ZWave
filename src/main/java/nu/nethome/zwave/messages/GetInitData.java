@@ -79,10 +79,12 @@ public class GetInitData {
         @Override
         public String toString() {
             String nodesString = "";
+            String separator = "";
             for (int node : nodes) {
-                nodesString += " " + Integer.toString(node);
+                nodesString += separator + Integer.toString(node);
+                separator = ",";
             }
-            return String.format("GetInitData.Response(mode=%s, type=%s, nodes: %s)", mode.name(), type.name(), nodesString);
+            return String.format("{\"GetInitData.Response\":{mode:\"%s\", type:\"%s\", nodes:[%s]}}", mode.name(), type.name(), nodesString);
         }
 
         public static class Processor extends MessageProcessorAdaptor<Response> {
