@@ -19,6 +19,8 @@
 
 package nu.nethome.zwave.messages.framework;
 
+import nu.nethome.zwave.messages.commandclasses.framework.UndecodedCommand;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,7 @@ import java.util.Map;
 public class MultiMessageProcessor implements MessageProcessor {
 
     Map<MessageId, MessageProcessor> processors = new HashMap<>();
+    MessageProcessor defaultMessageProcessor = new UndecodedMessage.Message.Processor();
 
     @Override
     public Message process(byte[] message) throws DecoderException, IOException {
@@ -36,10 +39,14 @@ public class MultiMessageProcessor implements MessageProcessor {
         if (processor != null) {
             return processor.process(message);
         }
-        return null;
+        return defaultMessageProcessor.process(message);
     }
 
     public void addMessageProcessor(int messageId, Message.Type type, MessageProcessor processor) {
         processors.put(new MessageId(messageId, type), processor);
+    }
+
+    public void setDefaultMessageProcessor(MessageProcessor defaultMessageProcessor) {
+        this.defaultMessageProcessor = defaultMessageProcessor;
     }
 }

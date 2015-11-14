@@ -46,6 +46,6 @@ public class UndecodedCommand extends CommandAdapter {
 
     @Override
     public String toString() {
-        return String.format("Command[%02X.%02X]{%s}", getCommandClass(), getCommand(), Hex.asHexString(Arrays.copyOfRange(commandData, 2, commandData.length)));
+        return String.format("{\"Unknown.Command\": {\"commandClass\": %d, \"command\": %d], \"data\": \"%s\"}}", getCommandClass(), getCommand(), Hex.asHexString(Arrays.copyOfRange(commandData, 2, commandData.length)));
     }
 }

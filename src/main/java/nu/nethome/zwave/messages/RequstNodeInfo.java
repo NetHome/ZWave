@@ -52,7 +52,6 @@ public class RequstNodeInfo {
     public static class Event extends MessageAdaptor {
         public final int nodeId;
 
-
         public Event(byte[] message) throws DecoderException {
             super(message, REQUEST_ID, Type.REQUEST);
             in.read(); // ??
@@ -69,6 +68,27 @@ public class RequstNodeInfo {
         @Override
         public String toString() {
             return String.format("{\"RequestNodeInfo.Event\": {\"node\": %d}}", nodeId);
+        }
+    }
+
+    public static class Response extends MessageAdaptor {
+        public final int nodeId;
+
+        public Response(byte[] message) throws DecoderException {
+            super(message, REQUEST_ID, Type.RESPONSE);
+            nodeId = in.read();
+        }
+
+        public static class Processor extends MessageProcessorAdaptor<Response> {
+            @Override
+            public Response process(byte[] command) throws DecoderException {
+                return process(new Response(command));
+            }
+        }
+
+        @Override
+        public String toString() {
+            return String.format("{\"RequestNodeInfo.Response\": {\"node\": %d}}", nodeId);
         }
     }
 }

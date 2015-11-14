@@ -85,7 +85,7 @@ public class ApplicationUpdate {
                     separator = "";
                 }
             }
-            return String.format("{\"ApplicationUpdate.Event\": {\"node\": %d, \"classes\": [[%s]]}}", nodeId, commandClassesString);
+            return String.format("{\"ApplicationUpdate.Event\": {\"updateState\": %d, \"node\": %d, \"classes\": [[%s]]}}", updateState, nodeId, commandClassesString);
         }
     }
 }

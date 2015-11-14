@@ -71,6 +71,8 @@ public class ZWaveExecutor {
         messageProcessor.addMessageProcessor(GetInitData.REQUEST_ID, Message.Type.RESPONSE, new GetInitData.Response.Processor());
         messageProcessor.addMessageProcessor(ApplicationCommand.REQUEST_ID, Message.Type.REQUEST, new ApplicationCommand.Request.Processor(commandProcessor));
         messageProcessor.addMessageProcessor(ApplicationUpdate.REQUEST_ID, Message.Type.REQUEST, new ApplicationUpdate.Event.Processor());
+        messageProcessor.addMessageProcessor(RequstNodeInfo.REQUEST_ID, Message.Type.RESPONSE, new RequstNodeInfo.Response.Processor());
+        messageProcessor.addMessageProcessor(RequstNodeInfo.REQUEST_ID, Message.Type.REQUEST, new RequstNodeInfo.Event.Processor());
         printPrompt();
     }
 
