@@ -63,6 +63,7 @@ public class ZWaveExecutor {
         commandProcessor.addCommandProcessor(new CommandCode(BasicCommandClass.COMMAND_CLASS, BasicCommandClass.REPORT), new BasicCommandClass.Report.Processor());
         commandProcessor.addCommandProcessor(new CommandCode(BasicCommandClass.COMMAND_CLASS, BasicCommandClass.SET), new BasicCommandClass.Set.Processor());
         commandProcessor.addCommandProcessor(new CommandCode(MultiInstanceCommandClass.COMMAND_CLASS, MultiInstanceCommandClass.ENCAP_V2), new MultiInstanceCommandClass.EncapsulationV2.Processor(commandProcessor));
+        commandProcessor.addCommandProcessor(new CommandCode(CentralSceneCommandClass.COMMAND_CLASS, CentralSceneCommandClass.SET), new CentralSceneCommandClass.Set.Processor());
         messageProcessor = new MultiMessageProcessor();
         messageProcessor.addMessageProcessor(MemoryGetId.MEMORY_GET_ID, Message.Type.RESPONSE, new MemoryGetId.Response.Processor());
         messageProcessor.addMessageProcessor(SendData.REQUEST_ID, Message.Type.REQUEST, new SendData.Request.Processor());
@@ -84,9 +85,11 @@ public class ZWaveExecutor {
                 sendRequest(new MemoryGetId.Request());
             } else if (command.equalsIgnoreCase("GetInitData") || command.equalsIgnoreCase("GID")) {
                 sendRequest(new GetInitData.Request());
-            } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Get") || command.equalsIgnoreCase("MIA.G")) {
+            } else if (command.equalsIgnoreCase("Association.Get") || command.equalsIgnoreCase("A.G")) {
+                sendCommand(parameters.getInt(1), new AssociationCommandClass.Get(parameters.getInt(2)));
+            }  else if (command.equalsIgnoreCase("MultiInstanceAssociation.Get") || command.equalsIgnoreCase("MIA.G")) {
                 sendCommand(parameters.getInt(1), new MultiInstanceAssociationCommandClass.Get(parameters.getInt(2)));
-            } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Set") || command.equalsIgnoreCase("MIA.S")) {
+            }else if (command.equalsIgnoreCase("MultiInstanceAssociation.Set") || command.equalsIgnoreCase("MIA.S")) {
                 sendCommand(parameters.getInt(1), new MultiInstanceAssociationCommandClass.Set(parameters.getInt(2), Collections.singletonList(parseAssociatedNode(parameters.getString(3)))));
             } else if (command.equalsIgnoreCase("MultiInstanceAssociation.Remove") || command.equalsIgnoreCase("MIA.R")) {
                 sendCommand(parameters.getInt(1), new MultiInstanceAssociationCommandClass.Remove(parameters.getInt(2), Collections.singletonList(parseAssociatedNode(parameters.getString(3)))));

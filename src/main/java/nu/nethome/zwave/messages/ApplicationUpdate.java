@@ -23,8 +23,7 @@ import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.MessageAdaptor;
 import nu.nethome.zwave.messages.framework.MessageProcessorAdaptor;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.Arrays;
 
 /**
  *
@@ -39,12 +38,14 @@ public class ApplicationUpdate {
     public static final int NEW_ID_ASSIGNED = 0x40;
     public static final int DELETE_DONE = 0x20;
     public static final int SUC_ID = 0x10;
+    public static final int COMMAND_CLASS_MARK = 239;
 
 
     public static class Event extends MessageAdaptor {
         public final int nodeId;
         public final int updateState;
-        public final byte[] commandClasses;
+        public final byte[] supportedCommandClasses;
+        public final byte[] controlledCommandClasses;
 
 
         public Event(byte[] message) throws DecoderException {
@@ -56,12 +57,25 @@ public class ApplicationUpdate {
                 in.read();
                 in.read();
                 in.read();
-                commandClasses = new byte[numberOfCommandClasses];
-                in.read(commandClasses, 0, numberOfCommandClasses);
+                byte[] allCommandClasses = new byte[numberOfCommandClasses];
+                in.read(allCommandClasses, 0, numberOfCommandClasses);
+                int separatorPosition = find(allCommandClasses, (byte) COMMAND_CLASS_MARK);
+                supportedCommandClasses = Arrays.copyOfRange(allCommandClasses, 0, separatorPosition);
+                controlledCommandClasses = Arrays.copyOfRange(allCommandClasses, separatorPosition + (separatorPosition == numberOfCommandClasses ? 0 : 1), numberOfCommandClasses);
             } else {
                 nodeId = 0;
-                commandClasses = new byte[0];
+                supportedCommandClasses = new byte[0];
+                controlledCommandClasses = new byte[0];
             }
+        }
+
+        public int find(byte[] array, byte value) {
+            for (int i = 0; i < array.length; i++) {
+                if (array[i] == value) {
+                    return i;
+                }
+            }
+            return array.length;
         }
 
         public static class Processor extends MessageProcessorAdaptor<Event> {
@@ -73,19 +87,19 @@ public class ApplicationUpdate {
 
         @Override
         public String toString() {
-            String commandClassesString = "";
-            String separator = "";
-            for (byte commandClass : commandClasses) {
-                int cc = ((int) commandClass) & 0xFF;
-                if (cc != 239) {
-                    commandClassesString += String.format("%s%d", separator, cc);
-                    separator = ",";
-                } else {
-                    commandClassesString += "],[";
-                    separator = "";
-                }
-            }
-            return String.format("{\"ApplicationUpdate.Event\": {\"updateState\": %d, \"node\": %d, \"classes\": [[%s]]}}", updateState, nodeId, commandClassesString);
+            return String.format("{\"ApplicationUpdate.Event\": {\"updateState\": %d, \"node\": %d, \"supportedClasses\": [%s], \"controlledClasses\": [%s]}}",
+                    updateState, nodeId, asStringList(supportedCommandClasses), asStringList(controlledCommandClasses));
         }
+    }
+
+    private static String asStringList(byte[] supportedCommandClasses1) {
+        String commandClassesString = "";
+        String separator = "";
+        for (byte commandClass : supportedCommandClasses1) {
+            int cc = ((int) commandClass) & 0xFF;
+            commandClassesString += String.format("%s%d", separator, cc);
+            separator = ",";
+        }
+        return commandClassesString;
     }
 }

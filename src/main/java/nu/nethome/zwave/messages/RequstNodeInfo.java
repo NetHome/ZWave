@@ -27,7 +27,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Controller responds with: ApplicationUpdate(0x49)
+ * Request the controller for information about which command classes a specific node supports.
+ * The actual result of the request will be returned as an ApplicationUpdate-message.
  */
 public class RequstNodeInfo {
 
@@ -35,7 +36,6 @@ public class RequstNodeInfo {
 
     public static class Request extends MessageAdaptor {
         private int node;
-
 
         public Request(int node) {
             super(REQUEST_ID, Type.REQUEST);
