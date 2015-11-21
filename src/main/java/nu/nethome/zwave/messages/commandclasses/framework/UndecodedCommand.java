@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 public class UndecodedCommand extends CommandAdapter {
     byte[] commandData;
+
     public UndecodedCommand(byte[] commandData) throws DecoderException {
         super(commandData);
         this.commandData = commandData;
@@ -38,6 +39,11 @@ public class UndecodedCommand extends CommandAdapter {
     }
 
     public static class Processor extends CommandProcessorAdapter<UndecodedCommand> {
+        @Override
+        public CommandCode getCommandCode() {
+            return null;
+        }
+
         @Override
         public UndecodedCommand process(byte[] command, CommandArgument argument) throws DecoderException {
             return process(new UndecodedCommand(command), argument);

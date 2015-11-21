@@ -20,6 +20,7 @@
 package nu.nethome.zwave;
 
 import jssc.SerialPortException;
+import nu.nethome.zwave.messages.framework.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.io.InputStreamReader;
 
 public class Shell {
     ZWaveExecutor executor;
-    QueueingZWavePort port;
+    ZWavePort port;
     private NetHomePort netHomePort;
 
     public static void main(String[] args) throws PortException, IOException {
@@ -39,17 +40,11 @@ public class Shell {
     }
 
     private void runWithLocalPort(String portname) throws PortException, IOException {
-        port = new QueueingZWavePort(portname, new ZWavePort.Receiver() {
+        port = new ZWavePort(portname);
+        port.setReceiver(new MessageProcessor() {
             @Override
-            public void receiveMessage(byte[] message) {
-                executor.processZWaveMessage(message);
-            }
-
-            @Override
-            public void receiveFrameByte(byte frameByte) {
-                byte[] bytes = new byte[1];
-                bytes[0] = frameByte;
-                executor.processZWaveMessage(bytes);
+            public Message process(byte[] message) {
+                return executor.processZWaveMessage(message);
             }
         });
 
@@ -86,10 +81,11 @@ public class Shell {
     }
 
     private void runWithNetHomePort(String address, int portNumber) throws PortException, IOException {
-        netHomePort = new NetHomePort(address, portNumber, new NetHomePort.Receiver() {
+        netHomePort = new NetHomePort(address, portNumber);
+        netHomePort.setReceiver(new MessageProcessor() {
             @Override
-            public void receiveMessage(byte[] message) {
-                executor.processZWaveMessage(message);
+            public Message process(byte[] message) {
+                return executor.processZWaveMessage(message);
             }
         });
 

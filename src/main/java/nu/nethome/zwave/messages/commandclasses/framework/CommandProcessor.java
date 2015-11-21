@@ -23,5 +23,6 @@ import nu.nethome.zwave.messages.commandclasses.CommandArgument;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 public interface CommandProcessor {
+    CommandCode getCommandCode();
     Command process(byte[] command, CommandArgument argument) throws DecoderException;
 }

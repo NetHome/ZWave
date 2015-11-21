@@ -39,6 +39,11 @@ public class MultiCommandProcessor implements CommandProcessor {
     }
 
     @Override
+    public CommandCode getCommandCode() {
+        throw new IllegalStateException("MultiCommandProcessor have no command code");
+    }
+
+    @Override
     public Command process(byte[] message, CommandArgument argument) throws DecoderException {
         CommandProcessor processor = processors.get(CommandAdapter.decodeCommandCode(message));
         if (processor != null) {
@@ -47,8 +52,8 @@ public class MultiCommandProcessor implements CommandProcessor {
         return defaultProcessor.process(message, argument);
     }
 
-    public void addCommandProcessor(CommandCode command, CommandProcessor processor) {
-        processors.put(command, processor);
+    public void addCommandProcessor(CommandProcessor processor) {
+        processors.put(processor.getCommandCode(), processor);
     }
 
     public void setDefaultProcessor(CommandProcessor defaultProcessor) {

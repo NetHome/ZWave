@@ -93,6 +93,11 @@ public class MultiInstanceCommandClass implements CommandClass {
             }
 
             @Override
+            public CommandCode getCommandCode() {
+                return new CommandCode(COMMAND_CLASS, ENCAP_V2);
+            }
+
+            @Override
             public EncapsulationV2 process(byte[] command, CommandArgument argument) throws DecoderException {
                 return process(new EncapsulationV2(command), argument);
             }

@@ -19,6 +19,8 @@
 
 package nu.nethome.zwave.messages.framework;
 
+import nu.nethome.zwave.MessageProcessor;
+
 public abstract class MessageProcessorAdaptor<T> implements MessageProcessor {
     protected T process(T command) throws DecoderException {return command;}
 }

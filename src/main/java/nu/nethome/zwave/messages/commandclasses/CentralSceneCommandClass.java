@@ -22,6 +22,7 @@ package nu.nethome.zwave.messages.commandclasses;
 
 import nu.nethome.zwave.messages.commandclasses.framework.CommandAdapter;
 import nu.nethome.zwave.messages.commandclasses.framework.CommandClass;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandCode;
 import nu.nethome.zwave.messages.commandclasses.framework.CommandProcessorAdapter;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
@@ -58,6 +59,11 @@ public class CentralSceneCommandClass implements CommandClass {
         }
 
         public static class Processor extends CommandProcessorAdapter<Set> {
+            @Override
+            public CommandCode getCommandCode() {
+                return new CommandCode(COMMAND_CLASS, SET);
+            }
+
             @Override
             public Set process(byte[] command, CommandArgument argument) throws DecoderException {
                 return process(new Set(command), argument);

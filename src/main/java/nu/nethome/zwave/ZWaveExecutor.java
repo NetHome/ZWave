@@ -55,26 +55,32 @@ public class ZWaveExecutor {
     public ZWaveExecutor(MessageSender sender, Printer printer) {
         this.sender = sender;
         this.printer = printer;
-        MultiCommandProcessor commandProcessor = new MultiCommandProcessor();
-        commandProcessor.addCommandProcessor(new CommandCode(MultiInstanceAssociationCommandClass.COMMAND_CLASS, MultiInstanceAssociationCommandClass.ASSOCIATION_REPORT), new MultiInstanceAssociationCommandClass.Report.Processor());
-        commandProcessor.addCommandProcessor(new CommandCode(ConfigurationCommandClass.COMMAND_CLASS, ConfigurationCommandClass.REPORT_CONFIGURATION), new ConfigurationCommandClass.Report.Processor());
-        commandProcessor.addCommandProcessor(new CommandCode(SwitchBinaryCommandClass.COMMAND_CLASS, SwitchBinaryCommandClass.SWITCH_BINARY_REPORT), new SwitchBinaryCommandClass.Report.Processor());
-        commandProcessor.addCommandProcessor(new CommandCode(SwitchBinaryCommandClass.COMMAND_CLASS, SwitchBinaryCommandClass.SWITCH_BINARY_SET), new SwitchBinaryCommandClass.Set.Processor());
-        commandProcessor.addCommandProcessor(new CommandCode(BasicCommandClass.COMMAND_CLASS, BasicCommandClass.REPORT), new BasicCommandClass.Report.Processor());
-        commandProcessor.addCommandProcessor(new CommandCode(BasicCommandClass.COMMAND_CLASS, BasicCommandClass.SET), new BasicCommandClass.Set.Processor());
-        commandProcessor.addCommandProcessor(new CommandCode(MultiInstanceCommandClass.COMMAND_CLASS, MultiInstanceCommandClass.ENCAP_V2), new MultiInstanceCommandClass.EncapsulationV2.Processor(commandProcessor));
-        commandProcessor.addCommandProcessor(new CommandCode(CentralSceneCommandClass.COMMAND_CLASS, CentralSceneCommandClass.SET), new CentralSceneCommandClass.Set.Processor());
         messageProcessor = new MultiMessageProcessor();
+        addMessageProcessors();
+        addCommandProcessors();
+        printPrompt();
+    }
+
+    private void addMessageProcessors() {
         messageProcessor.addMessageProcessor(MemoryGetId.MEMORY_GET_ID, Message.Type.RESPONSE, new MemoryGetId.Response.Processor());
         messageProcessor.addMessageProcessor(SendData.REQUEST_ID, Message.Type.REQUEST, new SendData.Request.Processor());
         messageProcessor.addMessageProcessor(SendData.REQUEST_ID, Message.Type.RESPONSE, new SendData.Response.Processor());
         messageProcessor.addMessageProcessor(AddNode.REQUEST_ID, Message.Type.REQUEST, new AddNode.Event.Processor());
         messageProcessor.addMessageProcessor(GetInitData.REQUEST_ID, Message.Type.RESPONSE, new GetInitData.Response.Processor());
-        messageProcessor.addMessageProcessor(ApplicationCommand.REQUEST_ID, Message.Type.REQUEST, new ApplicationCommand.Request.Processor(commandProcessor));
         messageProcessor.addMessageProcessor(ApplicationUpdate.REQUEST_ID, Message.Type.REQUEST, new ApplicationUpdate.Event.Processor());
         messageProcessor.addMessageProcessor(RequstNodeInfo.REQUEST_ID, Message.Type.RESPONSE, new RequstNodeInfo.Response.Processor());
         messageProcessor.addMessageProcessor(RequstNodeInfo.REQUEST_ID, Message.Type.REQUEST, new RequstNodeInfo.Event.Processor());
-        printPrompt();
+    }
+
+    private void addCommandProcessors() {
+        messageProcessor.addCommandProcessor(new MultiInstanceAssociationCommandClass.Report.Processor());
+        messageProcessor.addCommandProcessor(new ConfigurationCommandClass.Report.Processor());
+        messageProcessor.addCommandProcessor(new SwitchBinaryCommandClass.Report.Processor());
+        messageProcessor.addCommandProcessor(new SwitchBinaryCommandClass.Set.Processor());
+        messageProcessor.addCommandProcessor(new BasicCommandClass.Report.Processor());
+        messageProcessor.addCommandProcessor(new BasicCommandClass.Set.Processor());
+        messageProcessor.addCommandProcessor(new MultiInstanceCommandClass.EncapsulationV2.Processor(messageProcessor.getDefaultCommandProcessor()));
+        messageProcessor.addCommandProcessor(new CentralSceneCommandClass.Set.Processor());
     }
 
     public String executeCommandLine(String commandLine) {
@@ -120,7 +126,7 @@ public class ZWaveExecutor {
             } else {
                 println("Error: Unknown command");
             }
-        } catch (Exception | DecoderException e) {
+        } catch (Exception e) {
             println("Error: " + e.getMessage());
         }
         printPrompt();
@@ -140,22 +146,23 @@ public class ZWaveExecutor {
         sender.sendZWaveMessage(request.encode());
     }
 
-    public void processZWaveMessage(byte[] message) {
+    public Message processZWaveMessage(byte[] message) {
+        Message result = null;
         if (message.length == 1) {
-            if (message[0] == ZWavePort.ACK) {
+            if (message[0] == ZWavePortRaw.ACK) {
                 println("ACK");
-            } else if (message[0] == ZWavePort.NAK) {
+            } else if (message[0] == ZWavePortRaw.NAK) {
                 println("NAK");
-            } else if (message[0] == ZWavePort.CAN) {
+            } else if (message[0] == ZWavePortRaw.CAN) {
                 println("CAN");
-            } else if (message[0] == ZWavePort.SOF) {
+            } else if (message[0] == ZWavePortRaw.SOF) {
                 println("SOF");
             }
         } else {
             try {
-                Message received = messageProcessor.process(message);
-                if (received != null) {
-                    println(received.toString());
+                result = messageProcessor.process(message);
+                if (result != null) {
+                    println(result.toString());
                 } else {
                     println("Unknown message: " + Hex.asHexString(message));
                 }
@@ -164,6 +171,7 @@ public class ZWaveExecutor {
             }
         }
         printPrompt();
+        return result;
     }
 
     private AssociatedNode parseAssociatedNode(String s) {

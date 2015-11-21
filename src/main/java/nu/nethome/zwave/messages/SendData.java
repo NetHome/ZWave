@@ -55,7 +55,11 @@ public class SendData {
             nextCallbackId = (nextCallbackId + 1) & 0xFF;
         }
 
-        public Request(byte[] message) throws DecoderException {
+        public Request(byte node, Command command) {
+            this(node, command, TRANSMIT_OPTIONS_ALL);
+        }
+
+            public Request(byte[] message) throws DecoderException {
             super(message, REQUEST_ID, Type.REQUEST);
             node = (byte)in.read();
             int commandLength = in.read();

@@ -17,10 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nu.nethome.zwave.messages.framework;
+package nu.nethome.zwave;
+
+import nu.nethome.zwave.messages.framework.DecoderException;
+import nu.nethome.zwave.messages.framework.Message;
 
 import java.io.IOException;
 
-interface MessageProcessor {
+public interface MessageProcessor {
     Message process(byte[] message) throws DecoderException, IOException;
 }

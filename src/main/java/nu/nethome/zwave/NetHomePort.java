@@ -1,5 +1,8 @@
 package nu.nethome.zwave;
 
+import jssc.SerialPortException;
+import nu.nethome.zwave.messages.framework.Message;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,18 +10,14 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class NetHomePort {
-    public static interface Receiver {
-        void receiveMessage(byte[] message);
-    }
 
-    private Receiver receiver;
+    private MessageProcessor receiver;
     private boolean isOpen;
     private DataOutputStream outputStream;
     private BufferedReader inputStream;
     private Socket clientSocket;
 
-    public NetHomePort(String address, int port, Receiver receiver) throws IOException {
-        this.receiver = receiver;
+    public NetHomePort(String address, int port) throws IOException {
         clientSocket = new Socket(address, port);
         outputStream = new DataOutputStream(clientSocket.getOutputStream());
         inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -31,6 +30,14 @@ public class NetHomePort {
                 receiveLoop();
             }
         }, "Port receive thread").start();
+    }
+
+    public void setReceiver(MessageProcessor receiver) {
+        this.receiver = receiver;
+    }
+
+    public void sendMessage(Message message) throws IOException {
+        this.sendMessage(message.encode());
     }
 
     public void sendMessage(byte[] message) throws IOException {
@@ -50,10 +57,10 @@ public class NetHomePort {
             while (isOpen) {
                 String[] line = inputStream.readLine().split(",");
                 if (line.length > 6 && line[0].equals("event") && line[1].equals("ZWave_Message") && line[3].equals("In")) {
-                    receiver.receiveMessage(Hex.hexStringToByteArray(line[5]));
+                    receiver.process(Hex.hexStringToByteArray(line[5]));
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }

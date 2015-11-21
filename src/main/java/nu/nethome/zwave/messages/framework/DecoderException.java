@@ -22,7 +22,7 @@ package nu.nethome.zwave.messages.framework;
 /**
 *
 */
-public class DecoderException extends Throwable {
+public class DecoderException extends Exception {
     public DecoderException(String message) {
         super(message);
     }

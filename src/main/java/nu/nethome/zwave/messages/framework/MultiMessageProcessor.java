@@ -19,7 +19,10 @@
 
 package nu.nethome.zwave.messages.framework;
 
-import nu.nethome.zwave.messages.commandclasses.framework.UndecodedCommand;
+import nu.nethome.zwave.MessageProcessor;
+import nu.nethome.zwave.messages.ApplicationCommand;
+import nu.nethome.zwave.messages.commandclasses.framework.CommandProcessor;
+import nu.nethome.zwave.messages.commandclasses.framework.MultiCommandProcessor;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,6 +35,11 @@ public class MultiMessageProcessor implements MessageProcessor {
 
     Map<MessageId, MessageProcessor> processors = new HashMap<>();
     MessageProcessor defaultMessageProcessor = new UndecodedMessage.Message.Processor();
+    MultiCommandProcessor defaultCommandProcessor = new MultiCommandProcessor();
+
+    public MultiMessageProcessor() {
+        addMessageProcessor(ApplicationCommand.REQUEST_ID, Message.Type.REQUEST, new ApplicationCommand.Request.Processor(defaultCommandProcessor));
+    }
 
     @Override
     public Message process(byte[] message) throws DecoderException, IOException {
@@ -46,7 +54,15 @@ public class MultiMessageProcessor implements MessageProcessor {
         processors.put(new MessageId(messageId, type), processor);
     }
 
+    public void addCommandProcessor(CommandProcessor processor) {
+        defaultCommandProcessor.addCommandProcessor(processor);
+    }
+
     public void setDefaultMessageProcessor(MessageProcessor defaultMessageProcessor) {
         this.defaultMessageProcessor = defaultMessageProcessor;
+    }
+
+    public MultiCommandProcessor getDefaultCommandProcessor() {
+        return defaultCommandProcessor;
     }
 }
