@@ -27,6 +27,24 @@
         <format>dir</format>
         <format>zip</format>
     </formats>
+    <fileSets>
+        <!-- Readme and license -->
+        <fileSet>
+            <outputDirectory>/</outputDirectory>
+            <directory>${basedir}</directory>
+            <filtered>true</filtered>
+            <includes>
+                <include>README.md</include>
+                <include>LICENSE</include>
+            </includes>
+        </fileSet>
+        <!-- start scripts -->
+        <fileSet>
+            <outputDirectory>/</outputDirectory>
+            <directory>${basedir}/src/site</directory>
+            <filtered>true</filtered>
+        </fileSet>
+    </fileSets>
     <dependencySets>
         <!-- include all runtime jars -->
         <dependencySet>
