@@ -58,6 +58,7 @@ public class ZWaveExecutor {
         messageProcessor = new MultiMessageProcessor();
         addMessageProcessors();
         addCommandProcessors();
+        println("OpenNetHome ZWave Command Prompt. Type h for help");
         printPrompt();
     }
 
@@ -112,17 +113,19 @@ public class ZWaveExecutor {
             }else if (command.equalsIgnoreCase("RequestNodeInfo") || command.equalsIgnoreCase("RNI")) {
                 sendRequest(new RequstNodeInfo.Request(parameters.getInt(1)));
             } else if (command.equalsIgnoreCase("Help") || command.equalsIgnoreCase("h")) {
-                println("MemoryGetId");
-                println("GetInitData");
-                println("AddNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
-                println("RequestNodeInfo node ");
-                println("MultiInstanceAssociation.Get node association");
-                println("MultiInstanceAssociation.Set node association associatedNode");
-                println("MultiInstanceAssociation.Remove node association associatedNode");
-                println("Configuration.Get node parameter");
-                println("Configuration.Set node parameter value length");
-                println("SwitchBinary.Get node");
-                println("SwitchBinary.Set node [0 1]");
+                println("Messages:");
+                println(" MemoryGetId");
+                println(" GetInitData");
+                println(" AddNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
+                println(" RequestNodeInfo node ");
+                println("Commands;");
+                println(" MultiInstanceAssociation.Get node association");
+                println(" MultiInstanceAssociation.Set node association associatedNode");
+                println(" MultiInstanceAssociation.Remove node association associatedNode");
+                println(" Configuration.Get node parameter");
+                println(" Configuration.Set node parameter value length");
+                println(" SwitchBinary.Get node");
+                println(" SwitchBinary.Set node [0 1]");
             } else {
                 println("Error: Unknown command");
             }

@@ -3,9 +3,13 @@ This is an Java API for Sigma Design's serial protocol for ZWave controllers. It
 The only external dependency is to the serial port interface jssc, but this is just located to a single class (ZWavePortRaw.java)
 and it is simple to use any other serial port library instead.
 
-Commands in Z-Wave are grouped in Command Classes, and each Command Class has a number of commands.
-The Command Class used to switch lamps and such things on and off is called SwitchBinary and has the commands: "Set", "Get" and "Report".
-To switch a lamp on you send a SwitchBinary.Set command with the argument "true". Commands are sent to the node with the SendData-message.
+Commands in Z-Wave are grouped in Command Classes, and each Command Class has a number of commands. In this API, each command
+is a separate java-class, which is enclosed in a java class representing the Z-Wave Command Class. So to instantiate a command,
+you specify **new [Command Class].[Command]**
+
+For example, the Command Class used to switch lamps and such things on and off is called SwitchBinary and has the commands: "Set", "Get" and "Report".
+The "Set" and "Get" commands are issued by the user of the API and the "Report" command is issued by the node towards the API.
+To switch a lamp on you create a SwitchBinary.Set command object with the argument "true". Commands are sent to the node with the SendData-message.
 
 In this example we switch on the lamp with node nr 17:
 ```java
@@ -16,6 +20,8 @@ In this example we switch on the lamp with node nr 17:
   zWavePort.sendMessage(message);                                 // Send the message
   zWavePort.close();
 ```
+
+There are more examples in the Examples.java file.
 
 The interface jar is also executable and works as a very simple ZWave command line interface.
 You can use it to send ZWave commands interactively and receive responses and events from the ZWave network.
