@@ -72,7 +72,7 @@ public class ZWavePort extends ZWavePortRaw {
         }
         if (outstandingMessage == null && !sendQueue.isEmpty()) {
             outstandingMessage = sendQueue.poll();
-            sendMessage(outstandingMessage);
+            super.sendMessage(outstandingMessage);
             currentSendTime = getNow();
         }
     }
@@ -88,7 +88,7 @@ public class ZWavePort extends ZWavePortRaw {
 
     private synchronized void resendCurrentMessage() throws SerialPortException {
         if (outstandingMessage != null) {
-            sendMessage(outstandingMessage);
+            super.sendMessage(outstandingMessage);
         }
     }
 

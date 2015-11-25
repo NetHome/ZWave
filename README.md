@@ -26,7 +26,7 @@ There are more examples in the Examples.java file.
 The interface jar is also executable and works as a very simple ZWave command line interface.
 You can use it to send ZWave commands interactively and receive responses and events from the ZWave network.
 This is very useful when exploring ZWave functions. The responses and events from the ZWave network are formatted as json,
-to be able to use it as and machine interface as well.
+to be able to use it as a machine interface as well.
 
 Below is an example of an interactive session where a new node is entered in the network which is allocated node 8.
 When the inclusion is ready the node (which is a lamp) is switched on.
