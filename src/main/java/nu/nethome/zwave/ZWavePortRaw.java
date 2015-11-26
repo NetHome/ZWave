@@ -71,9 +71,8 @@ public class ZWavePortRaw {
     /**
      * Create for test
      */
-    ZWavePortRaw(String portName, MessageProcessor receiver, SerialPort port) throws PortException {
+    ZWavePortRaw(String portName, SerialPort port) throws PortException {
         this.portName = portName;
-        this.receiver = receiver;
         this.serialPort = port;
     }
 
@@ -153,10 +152,10 @@ public class ZWavePortRaw {
                 readMessage(localPort);
                 logger.fine("Have read message");
             } catch (SerialPortException e) {
-                logger.fine("Serial port exception");
+                logger.fine("Serial port exception " + e.getMessage());
                 // Probably port is closed, ignore and will exit the while
             } catch (Exception e) {
-                logger.fine("General exception processing ZWave message");
+                logger.fine("General exception processing ZWave message " + e.getMessage());
             }
         }
     }

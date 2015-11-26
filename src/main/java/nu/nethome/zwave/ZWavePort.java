@@ -1,5 +1,6 @@
 package nu.nethome.zwave;
 
+import jssc.SerialPort;
 import jssc.SerialPortException;
 import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.Message;
@@ -22,7 +23,17 @@ public class ZWavePort extends ZWavePortRaw {
 
     public ZWavePort(String portName) throws PortException {
         super(portName);
-        setReceiver(new MessageProcessor() {
+        super.setReceiver(new MessageProcessor() {
+            @Override
+            public Message process(byte[] message) throws DecoderException, IOException {
+                return passThroughMessage(message);
+            }
+        });
+    }
+
+    public ZWavePort(String portName, SerialPort port) throws PortException {
+        super(portName, port);
+        super.setReceiver(new MessageProcessor() {
             @Override
             public Message process(byte[] message) throws DecoderException, IOException {
                 return passThroughMessage(message);

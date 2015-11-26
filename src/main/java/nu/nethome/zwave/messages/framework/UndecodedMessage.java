@@ -35,6 +35,11 @@ public class UndecodedMessage {
         }
 
         @Override
+        public byte[] encode() {
+            return data;
+        }
+
+        @Override
         public String toString() {
             return String.format("{\"UndecodedMessage\": {\"messageId\": %d, \"type\": \"%s\", \"data\": \"%s\"}}", decodeMessageId(data).messageId, decodeMessageId(data).type.name(), Hex.asHexString(Arrays.copyOfRange(data, 2, data.length)));
         }

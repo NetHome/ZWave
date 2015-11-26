@@ -57,7 +57,8 @@ public class ZWavePortRawTest {
     public void setUp() throws Exception {
         port = mock(SerialPort.class);
         receiver = new Receiver();
-        zWavePortRaw = new ZWavePortRaw("Name", receiver, port);
+        zWavePortRaw = new ZWavePortRaw("Name", port);
+        zWavePortRaw.setReceiver(receiver);
     }
 
     @Test
