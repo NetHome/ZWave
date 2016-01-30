@@ -21,7 +21,7 @@ In this example we switch on the lamp with node nr 17:
   zWavePort.close();
 ```
 
-There are more examples in the Examples.java file.
+There are more examples in the [Examples.java file] (https://github.com/NetHome/ZWave/blob/master/src/main/java/nu/nethome/zwave/Examples.java).
 
 The interface jar is also executable and works as a very simple ZWave command line interface.
 You can use it to send ZWave commands interactively and receive responses and events from the ZWave network.
