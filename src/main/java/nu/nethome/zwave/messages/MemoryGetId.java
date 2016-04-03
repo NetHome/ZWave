@@ -39,12 +39,12 @@ public class MemoryGetId  {
     public static class Response extends MessageAdaptor {
 
         public static final int EXPECTED_LENGTH = 7;
-        public final int homeId;
+        public final long homeId;
         public final int nodeId;
 
         public Response(byte[] message) throws DecoderException {
             super(message, MEMORY_GET_ID, Type.RESPONSE);
-            homeId = (in.read() << 24) + (in.read() << 16) + (in.read() << 8) + in.read();
+            homeId = ((long)in.read() << 24) + (in.read() << 16) + (in.read() << 8) + in.read();
             nodeId = in.read();
         }
 

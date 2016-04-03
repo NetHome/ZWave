@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class NetHomePort {
+public class ZWaveNetHomePort implements ZWavePort{
 
     private MessageProcessor receiver;
     private boolean isOpen;
@@ -17,7 +17,7 @@ public class NetHomePort {
     private BufferedReader inputStream;
     private Socket clientSocket;
 
-    public NetHomePort(String address, int port) throws IOException {
+    public ZWaveNetHomePort(String address, int port) throws IOException {
         clientSocket = new Socket(address, port);
         outputStream = new DataOutputStream(clientSocket.getOutputStream());
         inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -32,24 +32,41 @@ public class NetHomePort {
         }, "Port receive thread").start();
     }
 
+    @Override
     public void setReceiver(MessageProcessor receiver) {
         this.receiver = receiver;
     }
 
-    public void sendMessage(Message message) throws IOException {
+    @Override
+    public void sendMessage(Message message) throws PortException {
         this.sendMessage(message.encode());
     }
 
-    public void sendMessage(byte[] message) throws IOException {
-        outputStream.write(String.format("event,ZWave_Message,Direction,Out,Value,%s\n\r", Hex.asHexString(message)).getBytes());
-        outputStream.flush();
+    @Override
+    public void sendMessage(byte[] message) throws PortException {
+        try {
+            outputStream.write(String.format("event,ZWave_Message,Direction,Out,Value,%s\n\r", Hex.asHexString(message)).getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+            throw new PortException("Could not send message", e);
+        }
     }
 
-    public void close() throws IOException {
+    @Override
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    @Override
+    public void close() throws PortException {
         isOpen = false;
-        inputStream.close();
-        outputStream.close();
-        clientSocket.close();
+        try {
+            inputStream.close();
+            outputStream.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            throw new PortException("Could not close port", e);
+        }
     }
 
     private void receiveLoop() {

@@ -25,5 +25,5 @@ import nu.nethome.zwave.messages.framework.Message;
 import java.io.IOException;
 
 public interface MessageProcessor {
-    Message process(byte[] message) throws DecoderException, IOException;
+    Message process(byte[] message) throws DecoderException;
 }

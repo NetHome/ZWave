@@ -28,8 +28,8 @@ import java.io.InputStreamReader;
 
 public class Shell {
     ZWaveExecutor executor;
-    ZWavePort port;
-    private NetHomePort netHomePort;
+    ZWaveSerialPort port;
+    private ZWaveNetHomePort ZWaveNetHomePort;
 
     public static void main(String[] args) throws PortException, IOException {
         if (args.length == 2) {
@@ -40,7 +40,7 @@ public class Shell {
     }
 
     private void runWithLocalPort(String portname) throws PortException, IOException {
-        port = new ZWavePort(portname);
+        port = new ZWaveSerialPort(portname);
         port.setReceiver(new MessageProcessor() {
             @Override
             public Message process(byte[] message) {
@@ -54,7 +54,7 @@ public class Shell {
                     public void sendZWaveMessage(byte[] zWaveMessage) {
                         try {
                             port.sendMessage(zWaveMessage);
-                        } catch (SerialPortException e) {
+                        } catch (PortException e) {
                             e.printStackTrace();
                         }
                     }
@@ -81,8 +81,8 @@ public class Shell {
     }
 
     private void runWithNetHomePort(String address, int portNumber) throws PortException, IOException {
-        netHomePort = new NetHomePort(address, portNumber);
-        netHomePort.setReceiver(new MessageProcessor() {
+        ZWaveNetHomePort = new ZWaveNetHomePort(address, portNumber);
+        ZWaveNetHomePort.setReceiver(new MessageProcessor() {
             @Override
             public Message process(byte[] message) {
                 return executor.processZWaveMessage(message);
@@ -94,8 +94,8 @@ public class Shell {
                     @Override
                     public void sendZWaveMessage(byte[] zWaveMessage) {
                         try {
-                            netHomePort.sendMessage(zWaveMessage);
-                        } catch (IOException e) {
+                            ZWaveNetHomePort.sendMessage(zWaveMessage);
+                        } catch (PortException e) {
                             e.printStackTrace();
                         }
                     }
@@ -118,6 +118,6 @@ public class Shell {
             executor.executeCommandLine(line);
             line = br.readLine();
         }
-        netHomePort.close();
+        ZWaveNetHomePort.close();
     }
 }

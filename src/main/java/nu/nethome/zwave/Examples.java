@@ -1,13 +1,10 @@
 package nu.nethome.zwave;
 
 import jssc.SerialPortException;
-import nu.nethome.zwave.messages.ApplicationCommand;
 import nu.nethome.zwave.messages.SendData;
 import nu.nethome.zwave.messages.commandclasses.CommandArgument;
 import nu.nethome.zwave.messages.commandclasses.SwitchBinaryCommandClass;
 import nu.nethome.zwave.messages.commandclasses.framework.Command;
-import nu.nethome.zwave.messages.commandclasses.framework.CommandCode;
-import nu.nethome.zwave.messages.commandclasses.framework.MultiCommandProcessor;
 import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.Message;
 import nu.nethome.zwave.messages.framework.MultiMessageProcessor;
@@ -31,7 +28,7 @@ public class Examples {
      * @throws IOException
      */
     static public void switchLampOn() throws IOException, PortException, SerialPortException {
-        ZWavePort zWavePort = new ZWavePort("/dev/ttyAMA0");            // Open the port to the ZWave USB Stick
+        ZWaveSerialPort zWavePort = new ZWaveSerialPort("/dev/ttyAMA0");            // Open the port to the ZWave USB Stick
 
         Command onCommand = new SwitchBinaryCommandClass.Set(true);     // Create the command
         Message message = new SendData.Request(LAMP_NODE, onCommand);   // Create a message with the command
@@ -48,7 +45,7 @@ public class Examples {
      * @throws IOException
      */
     static public void getLampState() throws IOException, InterruptedException, PortException, SerialPortException {
-        ZWavePort zWavePort = new ZWavePort("/dev/ttyAMA0");            // Open the port to the ZWave USB Stick
+        ZWaveSerialPort zWavePort = new ZWaveSerialPort("/dev/ttyAMA0");            // Open the port to the ZWave USB Stick
         MultiMessageProcessor messageProcessor = new MultiMessageProcessor();
 
         // Add our custom processor for the SwitchBinary.Report Command to the MessageProcessor

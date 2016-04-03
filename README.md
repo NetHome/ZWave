@@ -13,7 +13,7 @@ To switch a lamp on you create a SwitchBinary.Set command object with the argume
 
 In this example we switch on the lamp with node nr 17:
 ```java
-  ZWavePort zWavePort = new ZWavePort("/dev/ttyAMA0");            // Open the port to the ZWave USB Stick
+  ZWavePort zWavePort = new ZWaveSerialPort("/dev/ttyAMA0");            // Open the port to the ZWave USB Stick
   
   Command onCommand = new SwitchBinaryCommandClass.Set(true);     // Create the command
   Message message = new SendData.Request(17, onCommand);          // Create a message with the command

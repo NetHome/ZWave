@@ -74,14 +74,18 @@ public class ApplicationCommand {
             });
         }
 
-        public Request(byte[] data, CommandProcessor processor) throws IOException, DecoderException {
+        public Request(byte[] data, CommandProcessor processor) throws DecoderException {
             super(data, REQUEST_ID, Type.REQUEST);
-            in.read(); // ?? Seems to be zero
-            node = in.read();
-            int commandLength = in.read();
-            byte[] commandData = new byte[commandLength];
-            in.read(commandData);
-            command = processor.process(commandData, new CommandArgument(node));
+            try {
+                in.read(); // ?? Seems to be zero
+                node = in.read();
+                int commandLength = in.read();
+                byte[] commandData = new byte[commandLength];
+                in.read(commandData);
+                command = processor.process(commandData, new CommandArgument(node));
+            } catch (IOException e) {
+                throw new DecoderException(e.getMessage());
+            }
         }
 
         @Override
@@ -102,7 +106,7 @@ public class ApplicationCommand {
             }
 
             @Override
-            public Message process(byte[] message) throws DecoderException, IOException {
+            public Message process(byte[] message) throws DecoderException {
                 return process(new Request(message, commandProcessor));
             }
         }

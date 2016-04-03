@@ -42,7 +42,7 @@ public class MultiMessageProcessor implements MessageProcessor {
     }
 
     @Override
-    public Message process(byte[] message) throws DecoderException, IOException {
+    public Message process(byte[] message) throws DecoderException {
         MessageProcessor processor = processors.get(MessageAdaptor.decodeMessageId(message));
         if (processor != null) {
             return processor.process(message);

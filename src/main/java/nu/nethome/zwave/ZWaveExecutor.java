@@ -22,8 +22,6 @@ package nu.nethome.zwave;
 import nu.nethome.zwave.messages.*;
 import nu.nethome.zwave.messages.commandclasses.*;
 import nu.nethome.zwave.messages.commandclasses.framework.Command;
-import nu.nethome.zwave.messages.commandclasses.framework.CommandCode;
-import nu.nethome.zwave.messages.commandclasses.framework.MultiCommandProcessor;
 import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.Message;
 import nu.nethome.zwave.messages.framework.MultiMessageProcessor;
@@ -152,13 +150,13 @@ public class ZWaveExecutor {
     public Message processZWaveMessage(byte[] message) {
         Message result = null;
         if (message.length == 1) {
-            if (message[0] == ZWavePortRaw.ACK) {
+            if (message[0] == ZWaveRawSerialPort.ACK) {
                 println("ACK");
-            } else if (message[0] == ZWavePortRaw.NAK) {
+            } else if (message[0] == ZWaveRawSerialPort.NAK) {
                 println("NAK");
-            } else if (message[0] == ZWavePortRaw.CAN) {
+            } else if (message[0] == ZWaveRawSerialPort.CAN) {
                 println("CAN");
-            } else if (message[0] == ZWavePortRaw.SOF) {
+            } else if (message[0] == ZWaveRawSerialPort.SOF) {
                 println("SOF");
             }
         } else {
@@ -169,7 +167,7 @@ public class ZWaveExecutor {
                 } else {
                     println("Unknown message: " + Hex.asHexString(message));
                 }
-            } catch (DecoderException|IOException e) {
+            } catch (DecoderException e) {
                 println(e.getMessage());
             }
         }

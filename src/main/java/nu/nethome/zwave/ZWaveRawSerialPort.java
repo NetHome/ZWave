@@ -24,7 +24,6 @@ import jssc.SerialPortException;
 import jssc.SerialPortList;
 import jssc.SerialPortTimeoutException;
 import nu.nethome.zwave.messages.framework.DecoderException;
-import nu.nethome.zwave.messages.framework.Message;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -37,7 +36,7 @@ import java.util.logging.Logger;
  * and checksum, so the input and output from the port is raw ZWave byte strings with messages.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class ZWavePortRaw {
+public class ZWaveRawSerialPort {
     public static interface Receiver {
         void receiveMessage(byte[] message);
 
@@ -49,34 +48,34 @@ public class ZWavePortRaw {
     static final byte NAK = 0x15;
     static final byte CAN = 0x18;
 
-    private static Logger logger = Logger.getLogger(ZWavePortRaw.class.getName());
+    private static Logger logger = Logger.getLogger(ZWaveRawSerialPort.class.getName());
 
     String portName = "/dev/ttyAMA0";
-    private MessageProcessor receiver = new DummyProcessor();
+    private Receiver receiver = new DummyProcessor();
 
     protected SerialPort serialPort;
     protected volatile boolean isOpen = false;
 
-    public ZWavePortRaw(String portName, MessageProcessor receiver) throws PortException {
+    public ZWaveRawSerialPort(String portName, Receiver receiver) throws PortException {
         this.receiver = receiver;
         this.portName = portName;
         serialPort = new SerialPort(this.portName);
         open();
     }
 
-    public ZWavePortRaw(String portName) throws PortException {
+    public ZWaveRawSerialPort(String portName) throws PortException {
         this(portName, new DummyProcessor());
     }
 
     /**
      * Create for test
      */
-    ZWavePortRaw(String portName, SerialPort port) throws PortException {
+    ZWaveRawSerialPort(String portName, SerialPort port) throws PortException {
         this.portName = portName;
         this.serialPort = port;
     }
 
-    public void setReceiver(MessageProcessor receiver) {
+    public void setReceiver(Receiver receiver) {
         this.receiver = receiver;
     }
 
@@ -121,12 +120,16 @@ public class ZWavePortRaw {
         return isOpen;
     }
 
-    public void sendMessage(byte[] message) throws SerialPortException {
+    public void sendMessage(byte[] message) throws PortException {
+        try {
         serialPort.writeByte(SOF);
         byte messageLength = (byte) (message.length + 1);
         serialPort.writeByte(messageLength);
         serialPort.writeBytes(message);
         serialPort.writeByte(calculateChecksum(message, messageLength));
+        } catch (SerialPortException e) {
+            throw new PortException("Could not send message", e);
+        }
     }
 
     private static byte calculateChecksum(byte[] buffer, byte messageLength) {
@@ -185,10 +188,11 @@ public class ZWavePortRaw {
     private void processMessage(byte[] message, int checksum) throws SerialPortException, DecoderException, IOException {
         // NYI Verify checksum
         sendResponse(ACK);
-        receiver.process(message);
+        receiver.receiveMessage(message);
     }
 
-    protected void processMessage(int frameByte) {
+    protected void processMessage(int frameByte) throws DecoderException, IOException {
+        receiver.receiveFrameByte((byte)frameByte);
     }
 
     private void synchronizeCommunication() throws SerialPortException {
@@ -204,10 +208,13 @@ public class ZWavePortRaw {
         return serialPort.writeByte((byte) message);
     }
 
-    private static class DummyProcessor implements MessageProcessor {
+    private static class DummyProcessor implements Receiver {
         @Override
-        public Message process(byte[] message) throws DecoderException, IOException {
-            return null;
+        public void receiveMessage(byte[] message) {
+        }
+
+        @Override
+        public void receiveFrameByte(byte frameByte) {
         }
     }
 }
