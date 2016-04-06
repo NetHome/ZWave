@@ -26,7 +26,6 @@ import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.Message;
 import nu.nethome.zwave.messages.framework.MultiMessageProcessor;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -67,8 +66,8 @@ public class ZWaveExecutor {
         messageProcessor.addMessageProcessor(AddNode.REQUEST_ID, Message.Type.REQUEST, new AddNode.Event.Processor());
         messageProcessor.addMessageProcessor(GetInitData.REQUEST_ID, Message.Type.RESPONSE, new GetInitData.Response.Processor());
         messageProcessor.addMessageProcessor(ApplicationUpdate.REQUEST_ID, Message.Type.REQUEST, new ApplicationUpdate.Event.Processor());
-        messageProcessor.addMessageProcessor(RequstNodeInfo.REQUEST_ID, Message.Type.RESPONSE, new RequstNodeInfo.Response.Processor());
-        messageProcessor.addMessageProcessor(RequstNodeInfo.REQUEST_ID, Message.Type.REQUEST, new RequstNodeInfo.Event.Processor());
+        messageProcessor.addMessageProcessor(RequestNodeInfo.REQUEST_ID, Message.Type.RESPONSE, new RequestNodeInfo.Response.Processor());
+        messageProcessor.addMessageProcessor(RequestNodeInfo.REQUEST_ID, Message.Type.REQUEST, new RequestNodeInfo.Event.Processor());
     }
 
     private void addCommandProcessors() {
@@ -109,7 +108,7 @@ public class ZWaveExecutor {
             } else if (command.equalsIgnoreCase("AddNode")) {
                 sendRequest(new AddNode.Request(AddNode.Request.InclusionMode.fromName(parameters.getString(1))));
             }else if (command.equalsIgnoreCase("RequestNodeInfo") || command.equalsIgnoreCase("RNI")) {
-                sendRequest(new RequstNodeInfo.Request(parameters.getInt(1)));
+                sendRequest(new RequestNodeInfo.Request(parameters.getInt(1)));
             } else if (command.equalsIgnoreCase("Help") || command.equalsIgnoreCase("h")) {
                 println("Messages:");
                 println(" MemoryGetId");

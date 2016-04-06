@@ -30,7 +30,7 @@ import java.io.IOException;
  * Request the controller for information about which command classes a specific node supports.
  * The actual result of the request will be returned as an ApplicationUpdate-message.
  */
-public class RequstNodeInfo {
+public class RequestNodeInfo {
 
     public static final byte REQUEST_ID = (byte)0x60;
 
