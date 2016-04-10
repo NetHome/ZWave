@@ -68,6 +68,8 @@ public class ZWaveExecutor {
         messageProcessor.addMessageProcessor(ApplicationUpdate.REQUEST_ID, Message.Type.REQUEST, new ApplicationUpdate.Event.Processor());
         messageProcessor.addMessageProcessor(RequestNodeInfo.REQUEST_ID, Message.Type.RESPONSE, new RequestNodeInfo.Response.Processor());
         messageProcessor.addMessageProcessor(RequestNodeInfo.REQUEST_ID, Message.Type.REQUEST, new RequestNodeInfo.Event.Processor());
+        messageProcessor.addMessageProcessor(IsFailedNode.REQUEST_ID, Message.Type.RESPONSE, new IsFailedNode.Response.Processor());
+        messageProcessor.addMessageProcessor(((int)GetRoutingInfo.REQUEST_ID) & 0xFF, Message.Type.RESPONSE, new GetRoutingInfo.Response.Processor());
     }
 
     private void addCommandProcessors() {
@@ -90,6 +92,10 @@ public class ZWaveExecutor {
                 sendRequest(new MemoryGetId.Request());
             } else if (command.equalsIgnoreCase("GetInitData") || command.equalsIgnoreCase("GID")) {
                 sendRequest(new GetInitData.Request());
+            } else if (command.equalsIgnoreCase("IsFailedNode") || command.equalsIgnoreCase("IFN")) {
+                sendRequest(new IsFailedNode.Request(parameters.getInt(1)));
+            } else if (command.equalsIgnoreCase("GetRoutingInfo") || command.equalsIgnoreCase("GRI")) {
+                sendRequest(new GetRoutingInfo.Request(parameters.getInt(1), true, true));
             } else if (command.equalsIgnoreCase("Association.Get") || command.equalsIgnoreCase("A.G")) {
                 sendCommand(parameters.getInt(1), new AssociationCommandClass.Get(parameters.getInt(2)));
             }  else if (command.equalsIgnoreCase("MultiInstanceAssociation.Get") || command.equalsIgnoreCase("MIA.G")) {
@@ -117,7 +123,9 @@ public class ZWaveExecutor {
                 println(" MemoryGetId");
                 println(" GetInitData");
                 println(" AddNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
+                println(" GetRoutingInfo node");
                 println(" RequestNodeInfo node ");
+                println(" IsFailedNode node ");
                 println("Commands;");
                 println(" MultiInstanceAssociation.Get node association");
                 println(" MultiInstanceAssociation.Set node association associatedNode");

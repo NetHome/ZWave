@@ -23,42 +23,42 @@ import nu.nethome.zwave.messages.framework.DecoderException;
 import nu.nethome.zwave.messages.framework.MessageAdaptor;
 import nu.nethome.zwave.messages.framework.MessageProcessorAdaptor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
-public class GetInitData {
+public class GetRoutingInfo {
 
-    public enum ControllerMode {
-        SLAVE,
-        CONTROLLER
-    }
-
-    public enum ControllerType {
-        PRIMARY,
-        SECONDARY
-    }
-
-    public static final byte REQUEST_ID = (byte) 0x02;
+    public static final int REQUEST_ID = 0x80;
+    private static final int FUNCTION_ID = 3;
 
     public static class Request extends MessageAdaptor {
-        public Request() {
+        final public int node;
+        private final boolean includeBadNodes;
+        private final boolean includeNonRepeaters;
+
+        public Request(int node, boolean includeBadNodes, boolean includeNonRepeaters) {
             super(REQUEST_ID, Type.REQUEST);
+            this.node = node;
+            this.includeBadNodes = includeBadNodes;
+            this.includeNonRepeaters = includeNonRepeaters;
+        }
+
+        @Override
+        protected void addRequestData(ByteArrayOutputStream result) throws IOException {
+            super.addRequestData(result);
+            result.write(node);
+            result.write(includeBadNodes ? 0 : 1);
+            result.write(includeNonRepeaters ? 0 : 1);
+            result.write(FUNCTION_ID);
         }
     }
 
     public static class Response extends MessageAdaptor {
-        public final ControllerMode mode;
-        public final ControllerType type;
         public final List<Integer> nodes;
 
         public Response(byte[] message) throws DecoderException {
             super(message, REQUEST_ID, Type.RESPONSE);
-            int unknown = in.read();
-            int controller = in.read();
-            mode = (controller & 0x01) != 0 ? ControllerMode.SLAVE : ControllerMode.CONTROLLER;
-            type = (controller & 0x04) != 0 ? ControllerType.SECONDARY : ControllerType.PRIMARY;
-            if (in.read() != NUMBER_OF_NODE_BYTES) {
-                throw new DecoderException("Wrong number of node bytes");
-            }
             this.nodes = getNodesFromBitString(in);
         }
 
@@ -70,7 +70,7 @@ public class GetInitData {
                 nodesString += separator + Integer.toString(node);
                 separator = ",";
             }
-            return String.format("{\"GetInitData.Response\":{\"mode\":\"%s\", \"type\":\"%s\", \"nodes\":[%s]}}", mode.name(), type.name(), nodesString);
+            return String.format("{\"GetRoutingInfo.Response\":{\"nodes\":[%s]}}", nodesString);
         }
 
         public static class Processor extends MessageProcessorAdaptor<Response> {

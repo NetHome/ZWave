@@ -22,9 +22,12 @@ package nu.nethome.zwave.messages.framework;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageAdaptor implements Message {
     public static final byte Z_WAVE_REQUEST = 0;
+    public static final int NUMBER_OF_NODE_BYTES = 29;
     private final int requestId;
     private final Type type;
     protected ByteArrayInputStream in;
@@ -48,6 +51,22 @@ public class MessageAdaptor implements Message {
             return new MessageId(0, Type.REQUEST);
         }
         return new MessageId(((int)(message[1])) & 0xFF, message[0] == 0 ? Type.REQUEST : Type.RESPONSE);
+    }
+
+    public static List<Integer> getNodesFromBitString(ByteArrayInputStream inputStream) throws DecoderException {
+        int nodeId = 1;
+        List<Integer> nodes = new ArrayList<>();
+        for (int nodeByteCounter = 0; nodeByteCounter < NUMBER_OF_NODE_BYTES; nodeByteCounter++) {
+            int nodeByte = inputStream.read();
+            for (int bit = 0; bit < 8; bit++) {
+                if ((nodeByte & 1) == 1) {
+                    nodes.add(nodeId);
+                }
+                nodeByte >>= 1;
+                nodeId++;
+            }
+        }
+        return nodes;
     }
 
     @Override
