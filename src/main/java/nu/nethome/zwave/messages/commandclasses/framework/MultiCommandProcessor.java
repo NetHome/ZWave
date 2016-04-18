@@ -20,6 +20,7 @@
 package nu.nethome.zwave.messages.commandclasses.framework;
 
 import nu.nethome.zwave.messages.commandclasses.CommandArgument;
+import nu.nethome.zwave.messages.commandclasses.MultiInstanceCommandClass;
 import nu.nethome.zwave.messages.framework.DecoderException;
 
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class MultiCommandProcessor implements CommandProcessor {
 
     public MultiCommandProcessor() {
         this.defaultProcessor = new UndecodedCommand.Processor();
+        addCommandProcessor(new MultiInstanceCommandClass.EncapsulationV2.Processor(this));
     }
 
     public MultiCommandProcessor(CommandProcessor defaultProcessor) {

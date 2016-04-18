@@ -80,6 +80,11 @@ public class SwitchBinaryCommandClass implements CommandClass {
     public static class Report extends CommandAdapter {
         public final boolean isOn;
 
+        public Report(boolean on) {
+            super(COMMAND_CLASS, SWITCH_BINARY_REPORT);
+            isOn = on;
+        }
+
         public Report(byte[] data) throws DecoderException {
             super(data, COMMAND_CLASS, SWITCH_BINARY_REPORT);
             isOn = (in.read() > 0);

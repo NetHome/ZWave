@@ -31,9 +31,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- *
- */
 public class ZWaveExecutor {
 
     public interface MessageSender {
@@ -69,7 +66,7 @@ public class ZWaveExecutor {
         messageProcessor.addMessageProcessor(RequestNodeInfo.REQUEST_ID, Message.Type.RESPONSE, new RequestNodeInfo.Response.Processor());
         messageProcessor.addMessageProcessor(RequestNodeInfo.REQUEST_ID, Message.Type.REQUEST, new RequestNodeInfo.Event.Processor());
         messageProcessor.addMessageProcessor(IsFailedNode.REQUEST_ID, Message.Type.RESPONSE, new IsFailedNode.Response.Processor());
-        messageProcessor.addMessageProcessor(((int)GetRoutingInfo.REQUEST_ID) & 0xFF, Message.Type.RESPONSE, new GetRoutingInfo.Response.Processor());
+        messageProcessor.addMessageProcessor(GetRoutingInfo.REQUEST_ID, Message.Type.RESPONSE, new GetRoutingInfo.Response.Processor());
     }
 
     private void addCommandProcessors() {
