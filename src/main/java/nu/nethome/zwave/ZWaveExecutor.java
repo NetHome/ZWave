@@ -61,6 +61,7 @@ public class ZWaveExecutor {
         messageProcessor.addMessageProcessor(SendData.REQUEST_ID, Message.Type.REQUEST, new SendData.Request.Processor());
         messageProcessor.addMessageProcessor(SendData.REQUEST_ID, Message.Type.RESPONSE, new SendData.Response.Processor());
         messageProcessor.addMessageProcessor(AddNode.REQUEST_ID, Message.Type.REQUEST, new AddNode.Event.Processor());
+        messageProcessor.addMessageProcessor(RemoveNode.REQUEST_ID, Message.Type.REQUEST, new RemoveNode.Event.Processor());
         messageProcessor.addMessageProcessor(GetInitData.REQUEST_ID, Message.Type.RESPONSE, new GetInitData.Response.Processor());
         messageProcessor.addMessageProcessor(ApplicationUpdate.REQUEST_ID, Message.Type.REQUEST, new ApplicationUpdate.Event.Processor());
         messageProcessor.addMessageProcessor(RequestNodeInfo.REQUEST_ID, Message.Type.RESPONSE, new RequestNodeInfo.Response.Processor());
@@ -111,9 +112,11 @@ public class ZWaveExecutor {
                 sendCommand(parameters.getInt(1), new ApplicationSpecificCommandClass.Get());
             } else if (command.equalsIgnoreCase("SwitchBinary.Get") || command.equalsIgnoreCase("SB.G")) {
                 sendCommand(parameters.getInt(1), new SwitchBinaryCommandClass.Get());
-            } else if (command.equalsIgnoreCase("AddNode")) {
+            } else if (command.equalsIgnoreCase("AddNode") || command.equalsIgnoreCase("AN")) {
                 sendRequest(new AddNode.Request(AddNode.Request.InclusionMode.fromName(parameters.getString(1))));
-            }else if (command.equalsIgnoreCase("RequestNodeInfo") || command.equalsIgnoreCase("RNI")) {
+            } else if (command.equalsIgnoreCase("RemoveNode") || command.equalsIgnoreCase("RN")) {
+                sendRequest(new RemoveNode.Request(RemoveNode.Request.ExclusionMode.fromName(parameters.getString(1))));
+            } else if (command.equalsIgnoreCase("RequestNodeInfo") || command.equalsIgnoreCase("RNI")) {
                 sendRequest(new RequestNodeInfo.Request(parameters.getInt(1)));
             } else if (command.equalsIgnoreCase("Help") || command.equalsIgnoreCase("h")) {
                 println("Messages:");
