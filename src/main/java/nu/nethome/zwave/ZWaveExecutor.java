@@ -75,6 +75,7 @@ public class ZWaveExecutor {
         messageProcessor.addCommandProcessor(new ConfigurationCommandClass.Report.Processor());
         messageProcessor.addCommandProcessor(new SwitchBinaryCommandClass.Report.Processor());
         messageProcessor.addCommandProcessor(new SwitchBinaryCommandClass.Set.Processor());
+        messageProcessor.addCommandProcessor(new MultiLevelSwitchCommandClass.Report.Processor());
         messageProcessor.addCommandProcessor(new BasicCommandClass.Report.Processor());
         messageProcessor.addCommandProcessor(new BasicCommandClass.Set.Processor());
         messageProcessor.addCommandProcessor(new MultiInstanceCommandClass.EncapsulationV2.Processor(messageProcessor.getDefaultCommandProcessor()));
@@ -108,10 +109,14 @@ public class ZWaveExecutor {
                 sendCommand(parameters.getInt(1), new ConfigurationCommandClass.Set(parameters.getInt(2), new Parameter(parameters.getInt(3), parameters.getInt(4))));
             } else if (command.equalsIgnoreCase("SwitchBinary.Set") || command.equalsIgnoreCase("SB.S")) {
                 sendCommand(parameters.getInt(1), new SwitchBinaryCommandClass.Set(parameters.getInt(2) != 0));
+            } else if (command.equalsIgnoreCase("MultiLevelSwitch.Set") || command.equalsIgnoreCase("MLS.S")) {
+                sendCommand(parameters.getInt(1), new MultiLevelSwitchCommandClass.Set(parameters.getInt(2)));
             } else if (command.equalsIgnoreCase("ApplicationSpecific.Get") || command.equalsIgnoreCase("AS.G")) {
                 sendCommand(parameters.getInt(1), new ApplicationSpecificCommandClass.Get());
             } else if (command.equalsIgnoreCase("SwitchBinary.Get") || command.equalsIgnoreCase("SB.G")) {
                 sendCommand(parameters.getInt(1), new SwitchBinaryCommandClass.Get());
+            } else if (command.equalsIgnoreCase("MultiLevelSwitch.Get") || command.equalsIgnoreCase("MLS.G")) {
+                sendCommand(parameters.getInt(1), new MultiLevelSwitchCommandClass.Get());
             } else if (command.equalsIgnoreCase("AddNode") || command.equalsIgnoreCase("AN")) {
                 sendRequest(new AddNode.Request(AddNode.Request.InclusionMode.fromName(parameters.getString(1))));
             } else if (command.equalsIgnoreCase("RemoveNode") || command.equalsIgnoreCase("RN")) {
@@ -123,6 +128,7 @@ public class ZWaveExecutor {
                 println(" MemoryGetId");
                 println(" GetInitData");
                 println(" AddNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
+                println(" RemoveNode [ANY CONTROLLER SLAVE EXISTING STOP STOP_FAILED]");
                 println(" GetRoutingInfo node");
                 println(" RequestNodeInfo node ");
                 println(" IsFailedNode node ");
@@ -134,6 +140,8 @@ public class ZWaveExecutor {
                 println(" Configuration.Set node parameter value length");
                 println(" SwitchBinary.Get node");
                 println(" SwitchBinary.Set node [0 1]");
+                println(" MultiLevelSwitch.Get node");
+                println(" MultiLevelSwitch.Set node [0 - 99]");
                 println(" ApplicationSpecific.Get node");
             } else {
                 println("Error: Unknown command");
