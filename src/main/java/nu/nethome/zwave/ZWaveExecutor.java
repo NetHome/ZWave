@@ -111,6 +111,10 @@ public class ZWaveExecutor {
                 sendCommand(parameters.getInt(1), new SwitchBinaryCommandClass.Set(parameters.getInt(2) != 0));
             } else if (command.equalsIgnoreCase("MultiLevelSwitch.Set") || command.equalsIgnoreCase("MLS.S")) {
                 sendCommand(parameters.getInt(1), new MultiLevelSwitchCommandClass.Set(parameters.getInt(2)));
+            } else if (command.equalsIgnoreCase("MultiLevelSwitch.StartLevelChange") || command.equalsIgnoreCase("MLS.STLC")) {
+                sendCommand(parameters.getInt(1), new MultiLevelSwitchCommandClass.StartLevelChange(parameters.getInt(2) == 0 ? MultiLevelSwitchCommandClass.StartLevelChange.Direction.DOWN : MultiLevelSwitchCommandClass.StartLevelChange.Direction.UP));
+            } else if (command.equalsIgnoreCase("MultiLevelSwitch.StopLevelChange") || command.equalsIgnoreCase("MLS.SLC")) {
+                sendCommand(parameters.getInt(1), new MultiLevelSwitchCommandClass.StopLevelChange());
             } else if (command.equalsIgnoreCase("ApplicationSpecific.Get") || command.equalsIgnoreCase("AS.G")) {
                 sendCommand(parameters.getInt(1), new ApplicationSpecificCommandClass.Get());
             } else if (command.equalsIgnoreCase("SwitchBinary.Get") || command.equalsIgnoreCase("SB.G")) {
@@ -142,6 +146,8 @@ public class ZWaveExecutor {
                 println(" SwitchBinary.Set node [0 1]");
                 println(" MultiLevelSwitch.Get node");
                 println(" MultiLevelSwitch.Set node [0 - 99]");
+                println(" MultiLevelSwitch.StartLevelChange node [0 = down, 1 = up] (MLS.STLC)");
+                println(" MultiLevelSwitch.StopLevelChange node");
                 println(" ApplicationSpecific.Get node");
             } else {
                 println("Error: Unknown command");

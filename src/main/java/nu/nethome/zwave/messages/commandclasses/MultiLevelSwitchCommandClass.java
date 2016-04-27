@@ -116,4 +116,88 @@ public class MultiLevelSwitchCommandClass implements CommandClass {
             return String.format("{\"MultiLevelSwitch.Report\":{\"level\": %d}}", level);
         }
     }
+
+    public static class StartLevelChange extends CommandAdapter {
+
+        private static final int DIRECTION_BIT = 1<<6;
+        private static final int IGNORE_START_POSITION_BIT = 1<<5;
+        public enum Direction {UP, DOWN}
+
+        public final Direction direction;
+        public final Integer startLevel;
+
+        public StartLevelChange(int startLevel, Direction direction) {
+            super(COMMAND_CLASS, SWITCH_MULTILEVEL_START_LEVEL_CHANGE);
+            this.direction = direction;
+            this.startLevel = startLevel;
+        }
+
+        public StartLevelChange(Direction direction) {
+            super(COMMAND_CLASS, SWITCH_MULTILEVEL_START_LEVEL_CHANGE);
+            this.direction = direction;
+            this.startLevel = null;
+        }
+
+        public StartLevelChange(byte[] data) throws DecoderException {
+            super(data, COMMAND_CLASS, SWITCH_MULTILEVEL_START_LEVEL_CHANGE);
+            int mode = in.read();
+            int startLevel = in.read();
+            direction = ((mode & DIRECTION_BIT) != 0) ? Direction.DOWN : Direction.UP;
+            this.startLevel = ((mode & IGNORE_START_POSITION_BIT) != 0) ? null : startLevel;
+        }
+
+        public static class Processor extends CommandProcessorAdapter<Set> {
+            @Override
+            public CommandCode getCommandCode() {
+                return new CommandCode(COMMAND_CLASS, SWITCH_MULTILEVEL_START_LEVEL_CHANGE);
+            }
+
+            @Override
+            public Set process(byte[] command, CommandArgument argument) throws DecoderException {
+                return process(new Set(command), argument);
+            }
+        }
+
+        @Override
+        protected void addCommandData(ByteArrayOutputStream result) {
+            super.addCommandData(result);
+            int mode = (direction == Direction.DOWN) ? DIRECTION_BIT : 0;
+            int tempStartLevel = 0;
+            if (startLevel == null) {
+                mode |= IGNORE_START_POSITION_BIT;
+            } else {
+                tempStartLevel = startLevel;
+            }
+            result.write(mode);
+            result.write(tempStartLevel);
+        }
+    }
+
+    public static class StopLevelChange extends CommandAdapter {
+
+        public StopLevelChange() {
+            super(COMMAND_CLASS, SWITCH_MULTILEVEL_STOP_LEVEL_CHANGE);
+        }
+
+        public StopLevelChange(byte[] data) throws DecoderException {
+            super(data, COMMAND_CLASS, SWITCH_MULTILEVEL_STOP_LEVEL_CHANGE);
+        }
+
+        public static class Processor extends CommandProcessorAdapter<Set> {
+            @Override
+            public CommandCode getCommandCode() {
+                return new CommandCode(COMMAND_CLASS, SWITCH_MULTILEVEL_STOP_LEVEL_CHANGE);
+            }
+
+            @Override
+            public Set process(byte[] command, CommandArgument argument) throws DecoderException {
+                return process(new Set(command), argument);
+            }
+        }
+
+        @Override
+        protected void addCommandData(ByteArrayOutputStream result) {
+            super.addCommandData(result);
+        }
+    }
 }
