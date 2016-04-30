@@ -125,17 +125,27 @@ public class MultiLevelSwitchCommandClass implements CommandClass {
 
         public final Direction direction;
         public final Integer startLevel;
+        public final int duration;
 
         public StartLevelChange(int startLevel, Direction direction) {
             super(COMMAND_CLASS, SWITCH_MULTILEVEL_START_LEVEL_CHANGE);
             this.direction = direction;
             this.startLevel = startLevel;
+            duration = 0xFF;
         }
 
         public StartLevelChange(Direction direction) {
             super(COMMAND_CLASS, SWITCH_MULTILEVEL_START_LEVEL_CHANGE);
             this.direction = direction;
             this.startLevel = null;
+            duration = 0xFF;
+        }
+
+        public StartLevelChange(Direction direction, int duration) {
+            super(COMMAND_CLASS, SWITCH_MULTILEVEL_START_LEVEL_CHANGE);
+            this.direction = direction;
+            this.startLevel = null;
+            this.duration = duration;
         }
 
         public StartLevelChange(byte[] data) throws DecoderException {
@@ -144,6 +154,11 @@ public class MultiLevelSwitchCommandClass implements CommandClass {
             int startLevel = in.read();
             direction = ((mode & DIRECTION_BIT) != 0) ? Direction.DOWN : Direction.UP;
             this.startLevel = ((mode & IGNORE_START_POSITION_BIT) != 0) ? null : startLevel;
+            if (in.available() > 0) {
+                duration = in.read();
+            } else {
+                duration = 0xFF;
+            }
         }
 
         public static class Processor extends CommandProcessorAdapter<Set> {
@@ -170,6 +185,7 @@ public class MultiLevelSwitchCommandClass implements CommandClass {
             }
             result.write(mode);
             result.write(tempStartLevel);
+            result.write(duration);
         }
     }
 
