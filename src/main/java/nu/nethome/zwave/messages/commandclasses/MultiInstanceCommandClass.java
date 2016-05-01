@@ -46,6 +46,48 @@ public class MultiInstanceCommandClass implements CommandClass {
     public static final int COMMAND_CLASS = 0x60;
     public static final int ENCAPSULATION_HEADER_LENGTH = 4;
 
+    public static class GetV2 extends CommandAdapter {
+        public GetV2() {
+            super(COMMAND_CLASS, ENDPOINT_GET);
+        }
+    }
+
+    public static class Report extends CommandAdapter {
+        private static final int DYNAMIC_ENDPOINTS = 0x80;
+        private static final int IDENTICAL_ENDPOINTS = 0x40;
+        public final boolean hasDynamicEndpoints;
+        public final boolean hasOnlyIdenticalEndpoints;
+        public final int numberOfEndpoints;
+
+
+        public Report(byte[] data) throws DecoderException {
+            super(data, COMMAND_CLASS, ENDPOINT_REPORT);
+            int flags = in.read();
+            hasDynamicEndpoints = (flags & DYNAMIC_ENDPOINTS) != 0;
+            hasOnlyIdenticalEndpoints = (flags & IDENTICAL_ENDPOINTS) != 0;
+            numberOfEndpoints = in.read() & 0x7F;
+        }
+
+        public static class Processor extends CommandProcessorAdapter<Report> {
+
+            @Override
+            public CommandCode getCommandCode() {
+                return new CommandCode(COMMAND_CLASS, ENDPOINT_REPORT);
+            }
+
+            @Override
+            public Report process(byte[] command, CommandArgument argument) throws DecoderException {
+                return process(new Report(command), argument);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return String.format("{\"MultiInstanceV2.Report\":{\"hasDynamic\": \"%b\", \"identical\": \"%b\", \"numberOfEndpoints\": %d}}", hasDynamicEndpoints, hasOnlyIdenticalEndpoints, numberOfEndpoints);
+        }
+    }
+
+
     public static class EncapsulationV2 extends CommandAdapter {
         public final int instance;
         public final Command command;
