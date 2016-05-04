@@ -55,8 +55,8 @@ public abstract class CommandAdapter implements Command {
 
     protected CommandAdapter(byte[] commandData, int commandClass, int command) throws DecoderException {
         this(commandData);
-        DecoderException.assertTrue(this.commandClass == commandClass, "Wrong command class in Association");
-        DecoderException.assertTrue(this.command == command, "Wrong command class in Association");
+        DecoderException.assertTrue(this.commandClass == commandClass, String.format("Unexpected CommandClass: %X", commandClass));
+        DecoderException.assertTrue(this.command == command, String.format("Unexpected Command: %X", command));
     }
 
     @Override

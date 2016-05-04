@@ -168,9 +168,12 @@ public class ZWaveRawSerialPort {
         switch (frameByte) {
             case SOF:
                 int messageLength;
-                messageLength = readByte(localPort, 20);
+                messageLength = readByte(localPort, 50);
+                logger.fine("Read message length: " + messageLength);
                 byte[] message = localPort.readBytes(messageLength - 1, 1000);
-                int checksum = readByte(localPort, 20);
+                logger.fine("Read " + message.length + "bytes");
+                int checksum = readByte(localPort, 50);
+                logger.fine("Read checksum: " + checksum);
                 processMessage(message, checksum);
                 break;
             case ACK:
