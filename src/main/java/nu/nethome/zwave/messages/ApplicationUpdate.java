@@ -44,6 +44,9 @@ public class ApplicationUpdate {
     public static class Event extends MessageAdaptor {
         public final int nodeId;
         public final int updateState;
+        public final int basicDeviceClass;
+        public final int genericDeviceClass;
+        public final int specificDeviceClass;
         public final byte[] supportedCommandClasses;
         public final byte[] controlledCommandClasses;
 
@@ -54,9 +57,9 @@ public class ApplicationUpdate {
             if (updateState == NODE_INFO_RECEIVED) {
                 nodeId = in.read();
                 int numberOfCommandClasses = in.read() - 3;
-                in.read();
-                in.read();
-                in.read();
+                basicDeviceClass = in.read();
+                genericDeviceClass = in.read();
+                specificDeviceClass = in.read();
                 byte[] allCommandClasses = new byte[numberOfCommandClasses];
                 in.read(allCommandClasses, 0, numberOfCommandClasses);
                 int separatorPosition = find(allCommandClasses, (byte) COMMAND_CLASS_MARK);
@@ -64,6 +67,9 @@ public class ApplicationUpdate {
                 controlledCommandClasses = Arrays.copyOfRange(allCommandClasses, separatorPosition + (separatorPosition == numberOfCommandClasses ? 0 : 1), numberOfCommandClasses);
             } else {
                 nodeId = 0;
+                basicDeviceClass = 0;
+                genericDeviceClass = 0;
+                specificDeviceClass = 0;
                 supportedCommandClasses = new byte[0];
                 controlledCommandClasses = new byte[0];
             }
