@@ -68,6 +68,7 @@ public class ZWaveExecutor {
         messageProcessor.addMessageProcessor(RequestNodeInfo.REQUEST_ID, Message.Type.REQUEST, new RequestNodeInfo.Event.Processor());
         messageProcessor.addMessageProcessor(IsFailedNode.REQUEST_ID, Message.Type.RESPONSE, new IsFailedNode.Response.Processor());
         messageProcessor.addMessageProcessor(GetRoutingInfo.REQUEST_ID, Message.Type.RESPONSE, new GetRoutingInfo.Response.Processor());
+        messageProcessor.addMessageProcessor(IdentifyNode.REQUEST_ID, Message.Type.RESPONSE, new IdentifyNode.Response.Processor());
     }
 
     private void addCommandProcessors() {
@@ -130,6 +131,8 @@ public class ZWaveExecutor {
                 sendRequest(new RemoveNode.Request(RemoveNode.Request.ExclusionMode.fromName(parameters.getString(1))));
             } else if (command.equalsIgnoreCase("RequestNodeInfo") || command.equalsIgnoreCase("RNI")) {
                 sendRequest(new RequestNodeInfo.Request(parameters.getInt(1)));
+            } else if (command.equalsIgnoreCase("IdentifyNode") || command.equalsIgnoreCase("IN")) {
+                sendRequest(new IdentifyNode.Request(parameters.getInt(1)));
             } else if (command.equalsIgnoreCase("Help") || command.equalsIgnoreCase("h")) {
                 println("Messages:");
                 println(" MemoryGetId");
