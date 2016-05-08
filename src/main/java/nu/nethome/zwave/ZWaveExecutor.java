@@ -84,6 +84,7 @@ public class ZWaveExecutor {
         messageProcessor.addCommandProcessor(new ApplicationSpecificCommandClass.Report.Processor());
         messageProcessor.addCommandProcessor(new MultiInstanceCommandClass.Report.Processor());
         messageProcessor.addCommandProcessor(new MeterCommandClass.Report.Processor());
+        messageProcessor.addCommandProcessor(new MultiLevelSensorCommandClass.Report.Processor());
     }
 
     public String executeCommandLine(String commandLine) {
@@ -128,6 +129,8 @@ public class ZWaveExecutor {
                 sendCommand(parameters.getInt(1), new MultiInstanceCommandClass.GetV2());
             } else if (command.equalsIgnoreCase("Meter.Get") || command.equalsIgnoreCase("M.G")) {
                 sendCommand(parameters.getInt(1), new MeterCommandClass.Get());
+            } else if (command.equalsIgnoreCase("MultiLevelSensor.Get") || command.equalsIgnoreCase("MLSe.G")) {
+                sendCommand(parameters.getInt(1), new MultiLevelSensorCommandClass.Get());
             } else if (command.equalsIgnoreCase("AddNode") || command.equalsIgnoreCase("AN")) {
                 sendRequest(new AddNode.Request(AddNode.Request.InclusionMode.fromName(parameters.getString(1))));
             } else if (command.equalsIgnoreCase("RemoveNode") || command.equalsIgnoreCase("RN")) {
