@@ -30,10 +30,10 @@ import java.io.ByteArrayOutputStream;
 
 public class MultiLevelSensorCommandClass implements CommandClass {
 
-    private static final int SUPPORTED_GET = 0x01;
-    private static final int SUPPORTED_REPORT = 0x02;
-    private static final int GET = 0x04;
-    private static final int REPORT = 0x05;
+    public static final int SUPPORTED_GET = 0x01;
+    public static final int SUPPORTED_REPORT = 0x02;
+    public static final int GET = 0x04;
+    public static final int REPORT = 0x05;
 
     public static final int COMMAND_CLASS = 0x31;
 
