@@ -1,0 +1,16 @@
+#!groovy​
+
+node {
+    stage 'Configure'
+
+    withEnv(["JAVA_HOME=${ tool 'Java8' }", "PATH+MAVEN=${tool 'Maven3'}/bin:${env.JAVA_HOME}/bin"]) {
+
+        stage 'Checkout'
+
+        git url: 'https://github.com/NetHome/ZWave.git'
+
+        stage 'Build'
+
+        sh "mvn --batch-mode -V -U -e clean install -Dsurefire.useFile=false"
+    }
+}
