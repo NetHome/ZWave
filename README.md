@@ -31,8 +31,8 @@ to be able to use it as a machine interface as well. To run it from a command li
     >java -cp zwave-1.0.jar nu.nethome.zwave.Shell COM7
 
 Where COM7 is the serial port where the ZWave USB-stick is attached. You can also run the command line interface against 
-a OpenNetHome-Server that has a ZWaveController-Item and a TCPCommandPort. If the command port has port number
-8005, the command line to start it is:
+a remote OpenNetHome-Server that has a ZWaveController-Item and a TCPCommandPort. If the command port has port number
+8005, and ip 192.168.1.130, the command line to start it is:
 
     java -cp zwave-1.0.jar nu.nethome.zwave.Shell 192.168.1.130 8005
 
